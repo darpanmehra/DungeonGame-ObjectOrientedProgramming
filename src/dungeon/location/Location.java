@@ -53,6 +53,51 @@ public class Location implements ILocation {
 
   @Override
   public String toString() {
-    return String.valueOf(locationName);
+    return String.format("I am location %s \n this is my north %s \n this is my south %s " +
+                    "\n this is my east %s \n this is my west %s \n",
+            this.locationName,
+            this.neighbours.get(Direction.NORTH) != null ? this.neighbours.get(Direction.NORTH).getName() : "NULL",
+            this.neighbours.get(Direction.SOUTH) != null ? this.neighbours.get(Direction.SOUTH).getName() : "NULL",
+            this.neighbours.get(Direction.EAST) != null ? this.neighbours.get(Direction.EAST).getName() : "NULL",
+            this.neighbours.get(Direction.WEST) != null ? this.neighbours.get(Direction.WEST).getName() : "NULL");
+//    return String.format("%s",
+//            this.locationName);
+  }
+
+
+  @Override
+  public String print() {
+
+    return String.format("%s",
+            this.locationName);
+//            this.neighbours.get(Direction.EAST) != null ? "-" : " ");
+//            this.neighbours.get(Direction.SOUTH) != null ? this.locationName + "\n|" : "");
+}
+
+public String printPipe() {
+  return String.format("%s",
+          this.neighbours.get(Direction.SOUTH) != null ? "|" : " ");
+}
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (obj.getClass() != this.getClass()) {
+      return false;
+    }
+    final Location other = (Location) obj;
+    if ((this.coordinates[0] == other.coordinates[0]) && (this.coordinates[1] == other.coordinates[1])) {
+      return true;
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 3;
+    hash = 53 * hash + Arrays.hashCode(this.coordinates);
+    return hash;
   }
 }

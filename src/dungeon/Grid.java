@@ -26,8 +26,10 @@ public class Grid {
     potentialPaths = new HashSet<>();
     initializeLocation();
     krus();
-    updatePotentialPaths();
+//    updatePotentialPaths();
+    updatePotentialPathsWrapping();
     algorithm();
+    addInterconnectivity(0);
   }
 
 
@@ -46,12 +48,12 @@ public class Grid {
   private void updatePotentialPaths() {
     for (int i = 0; i < maze.length; i++) {
       for (int j = 0; j < maze[i].length; j++) {
-        if (((i - 1) >= 0)) {
-          SortedSet<ILocation> path = new TreeSet<>();
-          path.add(maze[i][j]);
-          path.add(maze[i - 1][j]);
-          potentialPaths.add(path);
-        }
+//        if (((i - 1) >= 0)) {
+//          SortedSet<ILocation> path = new TreeSet<>();
+//          path.add(maze[i][j]);
+//          path.add(maze[i - 1][j]);
+//          potentialPaths.add(path);
+//        }
         if (((i + 1) < maze.length)) {
           SortedSet<ILocation> path = new TreeSet<>();
           path.add(maze[i][j]);
@@ -64,10 +66,63 @@ public class Grid {
           path.add(maze[i][j + 1]);
           potentialPaths.add(path);
         }
+//        if (((j - 1) >= 0)) {
+//          SortedSet<ILocation> path = new TreeSet<>();
+//          path.add(maze[i][j]);
+//          path.add(maze[i][j - 1]);
+//          potentialPaths.add(path);
+//        }
+      }
+    }
+  }
+
+
+  private void updatePotentialPathsWrapping() {
+    for (int i = 0; i < maze.length; i++) {
+      for (int j = 0; j < maze[i].length; j++) {
+        if (((i - 1) >= 0)) {
+          SortedSet<ILocation> path = new TreeSet<>();
+          path.add(maze[i][j]);
+          path.add(maze[i - 1][j]);
+          potentialPaths.add(path);
+        } else {
+          SortedSet<ILocation> path = new TreeSet<>();
+          path.add(maze[i][j]);
+          path.add(maze[maze.length - 1][j]);
+          potentialPaths.add(path);
+        }
+        if (((i + 1) < maze.length)) {
+          SortedSet<ILocation> path = new TreeSet<>();
+          path.add(maze[i][j]);
+          path.add(maze[i + 1][j]);
+          potentialPaths.add(path);
+        } else {
+          SortedSet<ILocation> path = new TreeSet<>();
+          path.add(maze[i][j]);
+          path.add(maze[0][j]);
+          potentialPaths.add(path);
+        }
+        if (((j + 1) < maze[i].length)) {
+          SortedSet<ILocation> path = new TreeSet<>();
+          path.add(maze[i][j]);
+          path.add(maze[i][j + 1]);
+          potentialPaths.add(path);
+        } else {
+          SortedSet<ILocation> path = new TreeSet<>();
+          path.add(maze[i][j]);
+          path.add(maze[i][0]);
+          potentialPaths.add(path);
+
+        }
         if (((j - 1) >= 0)) {
           SortedSet<ILocation> path = new TreeSet<>();
           path.add(maze[i][j]);
           path.add(maze[i][j - 1]);
+          potentialPaths.add(path);
+        } else {
+          SortedSet<ILocation> path = new TreeSet<>();
+          path.add(maze[i][j]);
+          path.add(maze[i][maze[i].length - 1]);
           potentialPaths.add(path);
         }
       }
@@ -77,13 +132,13 @@ public class Grid {
 
   //put every location in a set;
   private void krus() {
-    for (int i = 0; i < maze.length ; i++) {
-      for (int j = 0; j < maze[i].length ; j++) {
+    for (int i = 0; i < maze.length; i++) {
+      for (int j = 0; j < maze[i].length; j++) {
         List<ILocation> location = new ArrayList<>();
         location.add(maze[i][j]);
         kSet.add(location);
 
-       }
+      }
     }
   }
 
@@ -113,27 +168,133 @@ public class Grid {
         if (kSet.get(i).contains(firstLocation)) {
           firstLocationIndex = i; // index of list n is in
         }
-       if (kSet.get(i).contains(secondLocation)) {
+        if (kSet.get(i).contains(secondLocation)) {
           secondLocationIndex = i; //index of list o is in
         }
 
       }
 
       if (firstLocationIndex != secondLocationIndex) {
+        joinLocation(firstLocation, secondLocation);
         kSet.get(firstLocationIndex).addAll(kSet.get(secondLocationIndex));
         kSet.remove(secondLocationIndex);
       } else {
         System.out.println("Added to noHome");
         noHome.add(sortedLocationSet);
       }
-      System.out.println("Path: "+ sortedLocationSet);
-      System.out.println(kSet);
-      System.out.println("No home " + noHome);
-      System.out.println("No home length" + noHome.size());
+//      System.out.println("Path: "+ sortedLocationSet);
+//      System.out.println(kSet);
+//      System.out.println("No home " + noHome);
+//      System.out.println("No home length" + noHome.size());
+    }
+  }
+
+  public void joinLocation(ILocation firstLocation, ILocation secondLocation) {
+
+    for (int i = 0; i < maze.length; i++) {
+      for (int j = 0; j < maze[i].length; j++) {
+        if (firstLocation.equals(maze[i][j])) {
+          if (((i + 1) <= maze.length-1)) {
+            if (maze[i + 1][j].equals(secondLocation)) {
+              firstLocation.joinLocationToSouthDirection(secondLocation);
+              secondLocation.joinLocationToNorthDirection(firstLocation);
+            }
+          }else if ((i +1) > maze.length-1){
+            if (maze[0][j].equals(secondLocation)) {
+              firstLocation.joinLocationToSouthDirection(secondLocation);
+              secondLocation.joinLocationToNorthDirection(firstLocation);
+            }
+          }
+          if (((i - 1) >= 0)) {
+            if (maze[i - 1][j].equals(secondLocation)) {
+              firstLocation.joinLocationToNorthDirection(secondLocation);
+              secondLocation.joinLocationToSouthDirection(firstLocation);
+            }
+          }else if ((i-1) < 0) {
+            if (maze[maze.length -1][j].equals(secondLocation)) {
+              firstLocation.joinLocationToNorthDirection(secondLocation);
+              secondLocation.joinLocationToSouthDirection(firstLocation);
+            }
+          }
+          if (((j + 1) <= maze[i].length -1)) {
+            if (maze[i][j + 1].equals(secondLocation)) {
+              firstLocation.joinLocationToEastDirection(secondLocation);
+              secondLocation.joinLocationToWestDirection(firstLocation);
+            }
+          }else if ((j+1) > maze[i].length-1){
+            if (maze[i][0].equals(secondLocation)) {
+              firstLocation.joinLocationToEastDirection(secondLocation);
+              secondLocation.joinLocationToWestDirection(firstLocation);
+            }
+          }
+          if (((j - 1) >= 0)) {
+            if (maze[i][j - 1].equals(secondLocation)) {
+              firstLocation.joinLocationToWestDirection(secondLocation);
+              secondLocation.joinLocationToEastDirection(firstLocation);
+            }
+
+          }else if ((j-1) < 0){
+            if (maze[i][maze[i].length -1].equals(secondLocation)) {
+              firstLocation.joinLocationToWestDirection(secondLocation);
+              secondLocation.joinLocationToEastDirection(firstLocation);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public void addInterconnectivity(int num) {
+    testConnection();
+
+    System.out.println("\n \n \n \n \n \n");
+    ILocation firstLocation = null;
+    ILocation secondLocation = null;
+    SortedSet<ILocation> sortedLocationSet = null;
+    for (int i = 0; i < num; i++) {
+      sortedLocationSet = noHome.get(i);
+      int count = 0;
+      for (ILocation value : sortedLocationSet) {
+        if (count == 0) {
+          firstLocation = value;
+          count++;
+        }
+        secondLocation = value;
+      }
+      joinLocation(firstLocation, secondLocation);
     }
   }
 
 
+  public void testConnection() {
+    for (int i = 0; i < maze.length; i++) {
+      for (int j = 0; j < maze[i].length; j++) {
+        System.out.println(maze[i][j]);
+      }
+    }
+  }
+
+  public void printGrid() {
+    String finalString = "";
+    for(int i = 0; i < maze.length; i++)
+    {
+      for(int j = 0; j < maze[i].length
+              ; j++)
+      {
+        System.out.printf("%s", maze[i][j].print());
+      }
+      System.out.println();
+      for(int j = 0; j < maze[i].length; j++)
+      {
+        System.out.printf("%s", maze[i][j].printPipe() );
+      }
+      System.out.println();
+
+    }
+  }
+
+
+  //Getters
   public List<List<ILocation>> getKrus() {
     return kSet;
   }

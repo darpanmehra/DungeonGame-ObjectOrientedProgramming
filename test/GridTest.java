@@ -26,10 +26,22 @@ public class GridTest {
     System.out.println(grid.getPotentialPath());
 
     System.out.println(grid.getPotentialPath().size());
-
-    System.out.println(grid.getKrus());
-
-    System.out.println(grid.getKrus().size());
-
+//
+//    System.out.println(grid.getKrus());
+//
+//    System.out.println(grid.getKrus().size());
   }
+
+  @Test
+  public void testConnection(){
+    //grid.
+    grid.testConnection();
+  }
+
+  @Test
+  public void testPrintGrid(){
+    //grid.testConnection();
+    grid.printGrid();
+  }
+
 }
