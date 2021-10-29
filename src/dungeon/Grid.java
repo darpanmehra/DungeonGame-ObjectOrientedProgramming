@@ -37,7 +37,7 @@ public class Grid {
       for (int j = 0; j < maze[i].length; j++) {
         String name = "";
         name += loc;
-        maze[i][j] = new Location(name);
+        maze[i][j] = new Location(name, i, j);
         loc++;
       }
     }
@@ -92,6 +92,7 @@ public class Grid {
     list.addAll(potentialPaths);
 
     while (list.size() > 0) {
+
       ILocation firstLocation = null;
       ILocation secondLocation = null;
       int firstLocationIndex = -1;
@@ -106,6 +107,7 @@ public class Grid {
         }
         secondLocation = value; //o
       }
+      System.out.println("firstLocation: " + firstLocation.getName()+ " secondLocation: " + secondLocation.getName());
       list.remove(pathIndex);
       for (int i = 0; i < kSet.size(); i++) {
         if (kSet.get(i).contains(firstLocation)) {
@@ -121,6 +123,7 @@ public class Grid {
         kSet.get(firstLocationIndex).addAll(kSet.get(secondLocationIndex));
         kSet.remove(secondLocationIndex);
       } else {
+        System.out.println("Added to noHome");
         noHome.add(sortedLocationSet);
       }
       System.out.println("Path: "+ sortedLocationSet);
@@ -135,10 +138,9 @@ public class Grid {
     return kSet;
   }
 
-
-   public Set<SortedSet<ILocation>> getPotentialPath() {
-      return potentialPaths;
-   }
+  public Set<SortedSet<ILocation>> getPotentialPath() {
+    return potentialPaths;
+  }
 
 
 }

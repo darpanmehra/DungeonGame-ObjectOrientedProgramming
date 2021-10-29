@@ -1,11 +1,8 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-
 import dungeon.location.ILocation;
 import dungeon.location.Location;
-import dungeon.treasure.TreasureType;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,7 +11,7 @@ public class LocationTest {
 
   @Before
   public void setUp() throws Exception {
-    location = new Location("a");
+    location = new Location("a", 0, 0);
   }
 
   @Test
