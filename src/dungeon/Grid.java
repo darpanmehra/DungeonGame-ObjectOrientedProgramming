@@ -17,19 +17,29 @@ public class Grid {
   private List<List<ILocation>> kSet;
   private Random random;
   private List<SortedSet> noHome;
+  private List<ILocation> caveList;
+  private final double treasurePercentage;
 
-  public Grid(int numRow, int numCol, Random random) {
+  public Grid(int numRow, int numCol, int interConnectivity, String dungeonType, double treasurePercentage, Random random) {
     this.random = random;
+    this.treasurePercentage = treasurePercentage;
+
     noHome = new ArrayList<>();
     kSet = new ArrayList<>();
     maze = new ILocation[numRow][numCol];
     potentialPaths = new HashSet<>();
     initializeLocation();
     krus();
-//    updatePotentialPaths();
-    updatePotentialPathsWrapping();
+    updatePotentialPaths();
+//    updatePotentialPathsWrapping();
     algorithm();
     addInterconnectivity(0);
+
+
+    //Get Cave Locations
+    caveList = new ArrayList<>();
+    caveList = getCaves();
+    assignTreasures();
   }
 
 
@@ -162,7 +172,7 @@ public class Grid {
         }
         secondLocation = value; //o
       }
-      System.out.println("firstLocation: " + firstLocation.getName()+ " secondLocation: " + secondLocation.getName());
+      System.out.println("firstLocation: " + firstLocation.getName() + " secondLocation: " + secondLocation.getName());
       list.remove(pathIndex);
       for (int i = 0; i < kSet.size(); i++) {
         if (kSet.get(i).contains(firstLocation)) {
@@ -194,12 +204,12 @@ public class Grid {
     for (int i = 0; i < maze.length; i++) {
       for (int j = 0; j < maze[i].length; j++) {
         if (firstLocation.equals(maze[i][j])) {
-          if (((i + 1) <= maze.length-1)) {
+          if (((i + 1) <= maze.length - 1)) {
             if (maze[i + 1][j].equals(secondLocation)) {
               firstLocation.joinLocationToSouthDirection(secondLocation);
               secondLocation.joinLocationToNorthDirection(firstLocation);
             }
-          }else if ((i +1) > maze.length-1){
+          } else if ((i + 1) > maze.length - 1) {
             if (maze[0][j].equals(secondLocation)) {
               firstLocation.joinLocationToSouthDirection(secondLocation);
               secondLocation.joinLocationToNorthDirection(firstLocation);
@@ -210,18 +220,18 @@ public class Grid {
               firstLocation.joinLocationToNorthDirection(secondLocation);
               secondLocation.joinLocationToSouthDirection(firstLocation);
             }
-          }else if ((i-1) < 0) {
-            if (maze[maze.length -1][j].equals(secondLocation)) {
+          } else if ((i - 1) < 0) {
+            if (maze[maze.length - 1][j].equals(secondLocation)) {
               firstLocation.joinLocationToNorthDirection(secondLocation);
               secondLocation.joinLocationToSouthDirection(firstLocation);
             }
           }
-          if (((j + 1) <= maze[i].length -1)) {
+          if (((j + 1) <= maze[i].length - 1)) {
             if (maze[i][j + 1].equals(secondLocation)) {
               firstLocation.joinLocationToEastDirection(secondLocation);
               secondLocation.joinLocationToWestDirection(firstLocation);
             }
-          }else if ((j+1) > maze[i].length-1){
+          } else if ((j + 1) > maze[i].length - 1) {
             if (maze[i][0].equals(secondLocation)) {
               firstLocation.joinLocationToEastDirection(secondLocation);
               secondLocation.joinLocationToWestDirection(firstLocation);
@@ -233,8 +243,8 @@ public class Grid {
               secondLocation.joinLocationToEastDirection(firstLocation);
             }
 
-          }else if ((j-1) < 0){
-            if (maze[i][maze[i].length -1].equals(secondLocation)) {
+          } else if ((j - 1) < 0) {
+            if (maze[i][maze[i].length - 1].equals(secondLocation)) {
               firstLocation.joinLocationToWestDirection(secondLocation);
               secondLocation.joinLocationToEastDirection(firstLocation);
             }
@@ -276,17 +286,14 @@ public class Grid {
 
   public void printGrid() {
     String finalString = "";
-    for(int i = 0; i < maze.length; i++)
-    {
-      for(int j = 0; j < maze[i].length
-              ; j++)
-      {
+    for (int i = 0; i < maze.length; i++) {
+      for (int j = 0; j < maze[i].length
+              ; j++) {
         System.out.printf("%s", maze[i][j].print());
       }
       System.out.println();
-      for(int j = 0; j < maze[i].length; j++)
-      {
-        System.out.printf("%s", maze[i][j].printPipe() );
+      for (int j = 0; j < maze[i].length; j++) {
+        System.out.printf("%s", maze[i][j].printPipe());
       }
       System.out.println();
 
@@ -303,5 +310,26 @@ public class Grid {
     return potentialPaths;
   }
 
+  public List<ILocation> getCaves() {
+    for (int i = 0; i < maze.length; i++) {
+      for (int j = 0; j < maze[i].length; j++) {
+        ILocation loc = maze[i][j];
+        if (loc.isCave()) {
+          caveList.add(loc);
+        }
+      }
+    }
+    return caveList;
+  }
+
+  public void assignTreasures() {
+    int totalCaves = caveList.size();
+    double numberOfTreasuresCaves = Math.ceil(totalCaves * (treasurePercentage / 100));
+    for (double i= 0.0; i < numberOfTreasuresCaves; i++) {
+      int randomIndex = random.nextInt(caveList.size());
+      caveList.get(randomIndex).setTreasure();
+      caveList.remove(randomIndex);
+    }
+  }
 
 }

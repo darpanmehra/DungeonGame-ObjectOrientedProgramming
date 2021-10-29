@@ -17,7 +17,7 @@ public class GridTest {
     //Random random = new RandomMock(10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
     //Random random = new RandomMock(0);
     Random random = new Random();
-    grid = new Grid(4, 6, random);
+    grid = new Grid(4, 6, 0, "nonwrapping", 20, random);
   }
 
   @Test
@@ -44,4 +44,14 @@ public class GridTest {
     grid.printGrid();
   }
 
+  @Test
+  public void testIsCave(){
+    System.out.println("\n \n \n \n \n");
+    System.out.println(grid.getCaves());
+  }
+
+  @Test
+  public void testAssignTreasures(){
+    grid.assignTreasures();
+  }
 }
