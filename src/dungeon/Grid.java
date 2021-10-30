@@ -19,8 +19,32 @@ public class Grid {
   private List<SortedSet> noHome;
   private List<ILocation> caveList;
   private final double treasurePercentage;
+  private ILocation startLocation;
+  private ILocation endLocation;
 
   public Grid(int numRow, int numCol, int interConnectivity, String dungeonType, double treasurePercentage, Random random) {
+
+    if (numRow < 10 || numRow > 100) {
+      throw new IllegalArgumentException("Dungeon width must be between 10 and 100");
+    }
+    if (numCol < 10 || numCol > 100) {
+      throw new IllegalArgumentException("Dungeon width must be between 10 and 100");
+    }
+    if (interConnectivity < 0) {
+      throw new IllegalArgumentException("Interconnectivity must be between 0 and dungeon size");
+    }
+    if (!(dungeonType.equalsIgnoreCase("wrapping") || dungeonType.equalsIgnoreCase("nonwrapping"))) {
+      throw new IllegalArgumentException("Dungeon type must be wrapping or nonwrapping");
+    }
+    if (treasurePercentage < 0 || treasurePercentage > 100) {
+      throw new IllegalArgumentException("Treasure percentage must be between 0 and 100");
+    }
+    if (random == null) {
+      throw new IllegalArgumentException("Random must be specified");
+    }
+
+
+
     this.random = random;
     this.treasurePercentage = treasurePercentage;
 
@@ -28,6 +52,8 @@ public class Grid {
     kSet = new ArrayList<>();
     maze = new ILocation[numRow][numCol];
     potentialPaths = new HashSet<>();
+    this.startLocation = null;
+    this.endLocation = null;
     initializeLocation();
     krus();
     updatePotentialPaths();
@@ -35,11 +61,14 @@ public class Grid {
     algorithm();
     addInterconnectivity(0);
 
+    determineStartAndEndLocation();
+
 
     //Get Cave Locations
     caveList = new ArrayList<>();
     caveList = getCaves();
     assignTreasures();
+
   }
 
 
@@ -332,4 +361,20 @@ public class Grid {
     }
   }
 
+  public void determineStartAndEndLocation() {
+    int startRow = random.nextInt((int) Math.floor(maze.length/2));
+    int startCol = random.nextInt(maze[0].length);
+    int endRow = (int) Math.floor(maze.length/2) + startRow;
+    int endCol = (int) Math.floor(maze[0].length/2);
+    startLocation = maze[startRow][startCol];
+    endLocation = maze[endRow][endCol];
+
+    System.out.println("Start Location: " + startLocation + " End Location: " + endLocation);
+  }
+
+  //Final
+
+  protected ILocation getPlayerStartLocation(){
+    return new Location(startLocation);
+  }
 }
