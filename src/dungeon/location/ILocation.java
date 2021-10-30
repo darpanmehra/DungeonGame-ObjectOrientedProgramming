@@ -1,11 +1,14 @@
 package dungeon.location;
 
+import java.util.Map;
+
 import dungeon.directions.Direction;
+import dungeon.treasure.Treasure;
 
 public interface ILocation extends Comparable<ILocation> {
 
   String getName();
-    
+
   void joinLocationToNorthDirection(ILocation loc);
 
   void joinLocationToSouthDirection(ILocation loc);
@@ -21,4 +24,12 @@ public interface ILocation extends Comparable<ILocation> {
   String printPipe();
 
   String print();
+
+  int getRowCoordinate();
+
+  int getColCoordinate();
+
+  Map<Direction, ILocation> getNeighbours();
+
+  Treasure getTreasure();
 }

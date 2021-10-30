@@ -2,6 +2,7 @@ package dungeon.location;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import dungeon.directions.Direction;
@@ -24,9 +25,17 @@ public class Location implements ILocation {
     this.treasure = null;
   }
 
+  public Location(ILocation loc) {
+    this.locationName = loc.getName();
+    this.coordinates[0] = loc.getRowCoordinate();
+    this.coordinates[1] = loc.getColCoordinate();
+    this.neighbours = new HashMap<>(loc.getNeighbours());
+    this.treasure = loc.getTreasure();
+  }
+
   @Override
   public String getName() {
-    return this.locationName;
+    return this.coordinates[0] + ", " + this.coordinates[1];
   }
 
   @Override
@@ -66,15 +75,15 @@ public class Location implements ILocation {
 
   @Override
   public String toString() {
-    return String.format("%s %s", this.locationName, this.neighbours.size());
-//
-//    return String.format("I am location %s \n this is my north %s \n this is my south %s " +
-//                    "\n this is my east %s \n this is my west %s \n",
-//            this.locationName,
-//            this.neighbours.get(Direction.NORTH) != null ? this.neighbours.get(Direction.NORTH).getName() : "NULL",
-//            this.neighbours.get(Direction.SOUTH) != null ? this.neighbours.get(Direction.SOUTH).getName() : "NULL",
-//            this.neighbours.get(Direction.EAST) != null ? this.neighbours.get(Direction.EAST).getName() : "NULL",
-//            this.neighbours.get(Direction.WEST) != null ? this.neighbours.get(Direction.WEST).getName() : "NULL");
+    //return String.format("(%d, %d) - %s", this.coordinates[0], this.coordinates[1]);
+
+    return String.format("I am location (%s, %s) \n this is my north %s \n this is my south %s " +
+                    "\n this is my east %s \n this is my west %s \n",
+            this.coordinates[0], this.coordinates[1],
+            this.neighbours.get(Direction.NORTH) != null ? this.neighbours.get(Direction.NORTH).getName() : "NULL",
+            this.neighbours.get(Direction.SOUTH) != null ? this.neighbours.get(Direction.SOUTH).getName() : "NULL",
+            this.neighbours.get(Direction.EAST) != null ? this.neighbours.get(Direction.EAST).getName() : "NULL",
+            this.neighbours.get(Direction.WEST) != null ? this.neighbours.get(Direction.WEST).getName() : "NULL");
 //    return String.format("%s",
 //            this.locationName);
   }
@@ -95,6 +104,26 @@ public void setTreasure() {
             this.locationName);
 //            this.neighbours.get(Direction.EAST) != null ? "-" : " ");
 //            this.neighbours.get(Direction.SOUTH) != null ? this.locationName + "\n|" : "");
+  }
+
+  @Override
+  public int getRowCoordinate() {
+    return coordinates[0];
+  }
+
+  @Override
+  public int getColCoordinate() {
+    return coordinates[1];
+  }
+
+  @Override
+  public Map<Direction, ILocation> getNeighbours() {
+    return neighbours;
+  }
+
+  @Override
+  public Treasure getTreasure() {
+    return treasure;
   }
 
   public String printPipe() {
@@ -123,4 +152,6 @@ public void setTreasure() {
     hash = 53 * hash + Arrays.hashCode(this.coordinates);
     return hash;
   }
+
+
 }

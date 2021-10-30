@@ -172,7 +172,7 @@ public class Grid {
         }
         secondLocation = value; //o
       }
-      System.out.println("firstLocation: " + firstLocation.getName() + " secondLocation: " + secondLocation.getName());
+      //System.out.println("firstLocation: " + firstLocation.getName() + " secondLocation: " + secondLocation.getName());
       list.remove(pathIndex);
       for (int i = 0; i < kSet.size(); i++) {
         if (kSet.get(i).contains(firstLocation)) {
@@ -189,7 +189,7 @@ public class Grid {
         kSet.get(firstLocationIndex).addAll(kSet.get(secondLocationIndex));
         kSet.remove(secondLocationIndex);
       } else {
-        System.out.println("Added to noHome");
+        //System.out.println("Added to noHome");
         noHome.add(sortedLocationSet);
       }
 //      System.out.println("Path: "+ sortedLocationSet);
@@ -257,7 +257,7 @@ public class Grid {
   public void addInterconnectivity(int num) {
     testConnection();
 
-    System.out.println("\n \n \n \n \n \n");
+    //System.out.println("\n \n \n \n \n \n");
     ILocation firstLocation = null;
     ILocation secondLocation = null;
     SortedSet<ILocation> sortedLocationSet = null;
@@ -284,21 +284,21 @@ public class Grid {
     }
   }
 
-  public void printGrid() {
-    String finalString = "";
-    for (int i = 0; i < maze.length; i++) {
-      for (int j = 0; j < maze[i].length
-              ; j++) {
-        System.out.printf("%s", maze[i][j].print());
-      }
-      System.out.println();
-      for (int j = 0; j < maze[i].length; j++) {
-        System.out.printf("%s", maze[i][j].printPipe());
-      }
-      System.out.println();
-
-    }
-  }
+//  public void printGrid() {
+//    String finalString = "";
+//    for (int i = 0; i < maze.length; i++) {
+//      for (int j = 0; j < maze[i].length
+//              ; j++) {
+//        //System.out.printf("%s", maze[i][j].print());
+//      }
+//      //System.out.println();
+//      for (int j = 0; j < maze[i].length; j++) {
+//        //System.out.printf("%s", maze[i][j].printPipe());
+//      }
+//      //System.out.println();
+//
+//    }
+//  }
 
 
   //Getters
