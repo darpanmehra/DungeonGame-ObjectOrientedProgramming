@@ -32,6 +32,10 @@ public class Treasure implements ITreasure {
     return count;
   }
 
+  @Override
+  public Map<TreasureType, Integer> getTreasure() {
+    return treasury;
+  }
 
   @Override
   public String toString() {

@@ -2,12 +2,14 @@ package dungeon;
 
 import java.util.Random;
 
+import dungeon.character.Character;
+import dungeon.character.Player;
 import dungeon.location.ILocation;
 
 public class GameState implements IGameState {
 
-    private Grid dungeon;
-    private Random random;
+  private Grid dungeon;
+  private Character player;
 
   public GameState(int dungeonHeight, int dungeonWidth, int interConnectivity, String dungeonType, int treasurePercentage, Random random) {
     if (dungeonHeight < 10 || dungeonHeight > 100) {
@@ -31,11 +33,32 @@ public class GameState implements IGameState {
 
     dungeon = new Grid(dungeonHeight, dungeonWidth, interConnectivity, dungeonType, treasurePercentage, random);
 
+    //Create Player and assign start location
+    player = new Player("Player1");
+    player.setCurrentLocation(dungeon.getPlayerStartLocation());
   }
 
+  @Override
+  public boolean isGameOver(){
+    if (player.getCurrentLocation().equals(dungeon.getPlayerEndLocation())) {
+      return true;
+    }
+    return false;
+  }
+
+  @Override
+  public Character getPlayer() {
+    return player;
+  }
 
   @Override
   public ILocation getPlayerStartLocation() {
     return dungeon.getPlayerStartLocation();
   }
+
+  @Override
+  public ILocation getPlayerEndLocation() {
+    return dungeon.getPlayerEndLocation();
+  }
+
 }

@@ -9,6 +9,10 @@ public interface ILocation extends Comparable<ILocation> {
 
   String getName();
 
+  int getRowCoordinate();
+
+  int getColCoordinate();
+
   void joinLocationToNorthDirection(ILocation loc);
 
   void joinLocationToSouthDirection(ILocation loc);
@@ -21,15 +25,14 @@ public interface ILocation extends Comparable<ILocation> {
 
   void setTreasure();
 
-  String printPipe();
-
-  String print();
-
-  int getRowCoordinate();
-
-  int getColCoordinate();
+  Treasure getTreasure();
 
   Map<Direction, ILocation> getNeighbours();
 
-  Treasure getTreasure();
+  String getLocationCoordinateString();
+
+  //Extras
+  String printPipe();
+
+  String print();
 }

@@ -1,6 +1,8 @@
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Random;
+
 import dungeon.location.ILocation;
 import dungeon.location.Location;
 
@@ -15,7 +17,11 @@ public class LocationTest {
   }
 
   @Test
-  public void testName(){
+  public void testName()
+  {
+    ILocation location2 = new Location("b", 0, 1);
+    location.setTreasure();
+    location.joinLocationToEastDirection(location2);
     assertEquals("1", location.toString());
   }
 

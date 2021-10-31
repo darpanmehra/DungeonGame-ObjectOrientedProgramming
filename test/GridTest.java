@@ -47,11 +47,13 @@ public class GridTest {
   @Test
   public void testIsCave(){
     System.out.println("\n \n \n \n \n");
-    System.out.println(grid.getCaves());
+    //System.out.println(grid);
   }
 
   @Test
   public void testAssignTreasures(){
-    grid.assignTreasures();
+    //grid.assignTreasures();
   }
+
+
 }

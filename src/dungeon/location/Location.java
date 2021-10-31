@@ -7,7 +7,6 @@ import java.util.Random;
 
 import dungeon.directions.Direction;
 import dungeon.treasure.Treasure;
-import random.RandomMock;
 
 
 public class Location implements ILocation {
@@ -39,13 +38,27 @@ public class Location implements ILocation {
   }
 
   @Override
-  public boolean isCave() {
-    if (neighbours.size() == 2){
-      return false;
-    }
-      return true;
+  public int getRowCoordinate() {
+    return coordinates[0];
   }
 
+  @Override
+  public int getColCoordinate() {
+    return coordinates[1];
+  }
+
+  @Override
+  public Map<Direction, ILocation> getNeighbours() {
+    return neighbours;
+  }
+
+  @Override
+  public boolean isCave() {
+    if (neighbours.size() == 2) {
+      return false;
+    }
+    return true;
+  }
 
   @Override
   public void joinLocationToNorthDirection(ILocation loc) {
@@ -67,58 +80,11 @@ public class Location implements ILocation {
     neighbours.put(Direction.WEST, loc);
   }
 
-
   @Override
-  public int compareTo(ILocation o) {
-    return this.toString().compareTo(o.toString());
-  }
-
-  @Override
-  public String toString() {
-    //return String.format("(%d, %d) - %s", this.coordinates[0], this.coordinates[1]);
-
-    return String.format("I am location (%s, %s) \n this is my north %s \n this is my south %s " +
-                    "\n this is my east %s \n this is my west %s \n",
-            this.coordinates[0], this.coordinates[1],
-            this.neighbours.get(Direction.NORTH) != null ? this.neighbours.get(Direction.NORTH).getName() : "NULL",
-            this.neighbours.get(Direction.SOUTH) != null ? this.neighbours.get(Direction.SOUTH).getName() : "NULL",
-            this.neighbours.get(Direction.EAST) != null ? this.neighbours.get(Direction.EAST).getName() : "NULL",
-            this.neighbours.get(Direction.WEST) != null ? this.neighbours.get(Direction.WEST).getName() : "NULL");
-//    return String.format("%s",
-//            this.locationName);
-  }
-
-public String printNameAndSize(){
-    return String.format("%s %s", this.locationName, this.neighbours.size());
-}
-
-public void setTreasure() {
+  public void setTreasure() {
     if (isCave()) {
       treasure = new Treasure(new Random());
     }
-}
-  @Override
-  public String print() {
-
-    return String.format("%s",
-            this.locationName);
-//            this.neighbours.get(Direction.EAST) != null ? "-" : " ");
-//            this.neighbours.get(Direction.SOUTH) != null ? this.locationName + "\n|" : "");
-  }
-
-  @Override
-  public int getRowCoordinate() {
-    return coordinates[0];
-  }
-
-  @Override
-  public int getColCoordinate() {
-    return coordinates[1];
-  }
-
-  @Override
-  public Map<Direction, ILocation> getNeighbours() {
-    return neighbours;
   }
 
   @Override
@@ -126,9 +92,14 @@ public void setTreasure() {
     return treasure;
   }
 
-  public String printPipe() {
-    return String.format("%s",
-            this.neighbours.get(Direction.SOUTH) != null ? "|" : " ");
+  @Override
+  public String getLocationCoordinateString(){
+    return String.format("(%d, %d)", this.coordinates[0], this.coordinates[1]);
+  }
+
+  @Override
+  public int compareTo(ILocation o) {
+    return this.toString().compareTo(o.toString());
   }
 
   @Override
@@ -153,5 +124,39 @@ public void setTreasure() {
     return hash;
   }
 
+  @Override
+  public String toString() {
+    return String.format("(%d, %d)", this.coordinates[0], this.coordinates[1]);
+
+//    return String.format("I am location (%s, %s) \n this is my north %s \n this is my south %s " +
+//                    "\n this is my east %s \n this is my west %s \n",
+//            this.coordinates[0], this.coordinates[1],
+//            this.neighbours.get(Direction.NORTH) != null ? this.neighbours.get(Direction.NORTH).getName() : "NULL",
+//            this.neighbours.get(Direction.SOUTH) != null ? this.neighbours.get(Direction.SOUTH).getName() : "NULL",
+//            this.neighbours.get(Direction.EAST) != null ? this.neighbours.get(Direction.EAST).getName() : "NULL",
+//            this.neighbours.get(Direction.WEST) != null ? this.neighbours.get(Direction.WEST).getName() : "NULL");
+//    return String.format("%s",
+//            this.locationName);
+  }
+
+
+  //Extras
+  public String printNameAndSize() {
+    return String.format("%s %s", this.locationName, this.neighbours.size());
+  }
+
+  @Override
+  public String print() {
+
+    return String.format("%s",
+            this.locationName);
+//            this.neighbours.get(Direction.EAST) != null ? "-" : " ");
+//            this.neighbours.get(Direction.SOUTH) != null ? this.locationName + "\n|" : "");
+  }
+
+  public String printPipe() {
+    return String.format("%s",
+            this.neighbours.get(Direction.SOUTH) != null ? "|" : " ");
+  }
 
 }
