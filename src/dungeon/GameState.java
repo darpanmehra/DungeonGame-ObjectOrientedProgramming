@@ -1,9 +1,15 @@
 package dungeon;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import dungeon.character.Character;
 import dungeon.character.Player;
+import dungeon.directions.Direction;
 import dungeon.location.ILocation;
 
 public class GameState implements IGameState {
@@ -34,7 +40,7 @@ public class GameState implements IGameState {
     dungeon = new Grid(dungeonHeight, dungeonWidth, interConnectivity, dungeonType, treasurePercentage, random);
 
     //Create Player and assign start location
-    player = new Player("Player1");
+    player = new Player("Player");
     player.setCurrentLocation(dungeon.getPlayerStartLocation());
   }
 
@@ -52,6 +58,21 @@ public class GameState implements IGameState {
   }
 
   @Override
+  public List<Direction> getAvailableDirectionsFromPlayerPosition() {
+    Map<Direction, ILocation> neighbours = dungeon.getNeighbours(player.getCurrentLocation());
+    List<Direction> list = new ArrayList<>();
+    list.addAll(neighbours.keySet());
+    return list;
+  }
+
+  @Override
+  public ILocation movePlayer(Direction direction){
+    ILocation newLocation = dungeon.getNeighbours(player.getCurrentLocation()).get(direction);
+    player.setCurrentLocation(newLocation);
+    return newLocation;
+  }
+
+  @Override
   public ILocation getPlayerStartLocation() {
     return dungeon.getPlayerStartLocation();
   }
@@ -61,4 +82,14 @@ public class GameState implements IGameState {
     return dungeon.getPlayerEndLocation();
   }
 
+
+  @Override
+  public ILocation[][] getDungeon() {
+    return dungeon.getDungeonCopy();
+  }
+
+  @Override
+  public String printPlayerTravelStatus(){
+    return player.printTravelStatus();
+  }
 }

@@ -3,6 +3,7 @@ package dungeon.location;
 import java.util.Map;
 
 import dungeon.directions.Direction;
+import dungeon.treasure.ITreasure;
 import dungeon.treasure.Treasure;
 
 public interface ILocation extends Comparable<ILocation> {
@@ -23,16 +24,16 @@ public interface ILocation extends Comparable<ILocation> {
 
   boolean isCave();
 
+  void setTreasureEmpty();
+
   void setTreasure();
 
-  Treasure getTreasure();
+  ITreasure getOriginalTreasure();
+
+  ITreasure getTreasure();
 
   Map<Direction, ILocation> getNeighbours();
 
-  String getLocationCoordinateString();
+  String printLocationInfo();
 
-  //Extras
-  String printPipe();
-
-  String print();
 }

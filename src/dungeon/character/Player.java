@@ -1,13 +1,12 @@
 package dungeon.character;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import dungeon.location.ILocation;
-import dungeon.location.Location;
 import dungeon.treasure.ITreasure;
-import dungeon.treasure.Treasure;
 import dungeon.treasure.TreasureType;
 
 public class Player implements Character {
@@ -17,9 +16,14 @@ public class Player implements Character {
   private ILocation currentLocation;
   private List<ILocation> locationVisited;
 
-  public Player(String name){
-      this.name = name;
-      this.treasures = new TreeMap<>();
+  public Player(String name) {
+    if (name == null || name.isEmpty()) {
+      throw new IllegalArgumentException("Player name cannot be null or empty");
+    }
+    this.name = name;
+    this.treasures = new TreeMap<>();
+    this.currentLocation = null;
+    this.locationVisited = new ArrayList<>();
   }
 
   @Override
@@ -52,11 +56,29 @@ public class Player implements Character {
   @Override
   public void setCurrentLocation(ILocation location) {
     locationVisited.add(location);
+    ITreasure locationTreasure = location.getTreasure();
+    if (locationTreasure != null) {
+      addTreasure(locationTreasure);
+      location.setTreasureEmpty();
+    }
     this.currentLocation = location;
   }
 
   @Override
+  public String printTravelStatus() {
+    StringBuilder sb = new StringBuilder();
+    sb.append(this.name + " has traveled to the following locations: [");
+    for (ILocation location : this.locationVisited) {
+      sb.append(location.getName() + " ");
+    }
+    sb.append("].\nTreasures: ").append(this.treasures.toString());
+    return sb.toString();
+  }
+
+  @Override
   public String toString() {
-    return this.name + " is at " + this.currentLocation.getLocationCoordinateString();
+    return this.name
+            + " is at " + this.currentLocation.getName()
+            + " and has treasures " + this.treasures.toString();
   }
 }

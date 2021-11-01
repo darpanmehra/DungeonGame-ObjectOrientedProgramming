@@ -24,15 +24,6 @@ public class Treasure implements ITreasure {
   }
 
   @Override
-  public int numberOfTreasure() {
-    int count = 0;
-    for (Integer value: treasury.values()) {
-      count = count + value;
-    }
-    return count;
-  }
-
-  @Override
   public Map<TreasureType, Integer> getTreasure() {
     return treasury;
   }

@@ -6,6 +6,4 @@ public interface ITreasure {
 
   Map<TreasureType, Integer> getTreasure();
 
-  int numberOfTreasure();
-  
 }

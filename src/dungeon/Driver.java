@@ -1,8 +1,11 @@
 package dungeon;
 
+import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 import dungeon.character.Character;
+import dungeon.directions.Direction;
 import dungeon.location.ILocation;
 
 public class Driver {
@@ -24,14 +27,72 @@ public class Driver {
 
     Character player = model.getPlayer();
 
-    ILocation start = model.getPlayerStartLocation();
+    System.out.println("Welcome to the Dungeon! \n\n");
+    ILocation playerStartLocation = model.getPlayerStartLocation();
+    System.out.println("Player Start Position: " + playerStartLocation.getName());
 
-    ILocation end = model.getPlayerEndLocation();
+    ILocation playerEndLocation = model.getPlayerEndLocation();
+    System.out.println("Player End Position: " + playerEndLocation.getName());
 
-    System.out.println("Player: " + player.toString());
-    System.out.println("Player Start Location: " + start.getRowCoordinate() + ", " + start.getColCoordinate());
-    System.out.println("Player End Location: " + end.getRowCoordinate() + ", " + end.getColCoordinate());
+    // Print Dungeon Copy
+    ILocation[][] dungeon = model.getDungeon();
+    StringBuilder dungeonBuilder = new StringBuilder();
+    for(int i = 0; i < dungeon.length; i++){
+      for(int j = 0; j < dungeon[i].length; j++){
+        dungeonBuilder.append(dungeon[i][j].printLocationInfo());
+        dungeonBuilder.append("\n");
+      }
+    }
+    System.out.println(dungeonBuilder);
 
 
+    while (!model.isGameOver()) {
+      System.out.println(player);
+      List<Direction> availableDirections = model.getAvailableDirectionsFromPlayerPosition();
+      System.out.println("Location originally had " + player.getCurrentLocation().getOriginalTreasure() + " treasures which the player acquired.");
+      System.out.println("Available directions from current location: " + availableDirections);
+      ILocation newLocation;
+
+      String input;
+      Scanner sc = new Scanner(System.in);
+      System.out.println("Enter which direction you want to move now?");
+      input = sc.nextLine().toUpperCase();
+      switch (input) {
+        case "NORTH":
+          if (!availableDirections.contains(Direction.NORTH)) {
+            System.out.println("You cannot move in that direction");
+          }
+          newLocation = model.movePlayer(Direction.NORTH);
+          System.out.println("Moving player to: " + newLocation);
+          break;
+        case "SOUTH":
+          if (!availableDirections.contains(Direction.SOUTH)) {
+            System.out.println("You cannot move in that direction");
+          }
+          newLocation = model.movePlayer(Direction.SOUTH);
+          System.out.println("Moving player to: " + newLocation);
+          break;
+        case "EAST":
+          if (!availableDirections.contains(Direction.EAST)) {
+            System.out.println("You cannot move in that direction");
+          }
+          newLocation = model.movePlayer(Direction.EAST);
+          System.out.println("Moving player to: " + newLocation);
+          break;
+        case "WEST":
+          if (!availableDirections.contains(Direction.WEST)) {
+            System.out.println("You cannot move in that direction");
+          }
+          newLocation = model.movePlayer(Direction.WEST);
+          System.out.println("Moving player to: " + newLocation);
+          break;
+        default:
+          System.out.println("Invalid input");
+      }
+      System.out.print("\n");
+    }
+
+    System.out.println(model.printPlayerTravelStatus());
+    System.out.println("Game Over");
   }
 }

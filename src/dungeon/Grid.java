@@ -3,11 +3,14 @@ package dungeon;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.Stack;
 import java.util.TreeSet;
 
+import dungeon.directions.Direction;
 import dungeon.location.ILocation;
 import dungeon.location.Location;
 
@@ -19,6 +22,7 @@ public class Grid {
 
   private List<List<ILocation>> kruskalLocationGroup;
 
+  private int MIN_PATH_LENGTH = 5;
   private List<ILocation> caveList;
   private final double treasurePercentage;
   private ILocation startLocation;
@@ -78,15 +82,12 @@ public class Grid {
 
 
   private void initializeLocations() {
-    char loc = 'a';
+
     for (int i = 0; i < maze.length; i++) {
       for (int j = 0; j < maze[i].length; j++) {
-        String name = "";
-        name += loc;
-        maze[i][j] = new Location(name, i, j);
+        maze[i][j] = new Location(i, j, random);
         //Put the location in the kruskal group to join it later in the algorithm
         putInKruskalLocationGrouping(maze[i][j]);
-        loc++;
       }
     }
   }
@@ -282,7 +283,8 @@ public class Grid {
     ILocation secondLocation = null;
     SortedSet<ILocation> sortedLocationSet;
     for (int i = 0; i < numAdditionalConnections; i++) {
-      sortedLocationSet = leftOverList.get(i);
+      int randomIndex = random.nextInt(leftOverList.size());
+      sortedLocationSet = leftOverList.get(randomIndex);
       int count = 0;
       for (ILocation value : sortedLocationSet) {
         if (count == 0) {
@@ -292,6 +294,7 @@ public class Grid {
         secondLocation = value;
       }
       joinLocation(firstLocation, secondLocation);
+      leftOverList.remove(randomIndex);
     }
   }
 
@@ -318,14 +321,66 @@ public class Grid {
   }
 
   private void determineStartAndEndLocation() {
-    int startRow = random.nextInt((int) Math.floor(maze.length / 2));
-    int startCol = random.nextInt(maze[0].length);
-    int endRow = (int) Math.floor(maze.length / 2) + startRow;
-    int endCol = (int) Math.floor(maze[0].length / 2);
-    startLocation = maze[startRow][startCol];
-    endLocation = maze[endRow][endCol];
+//    int startRow = random.nextInt((int) Math.floor(maze.length / 2));
+//    int startCol = random.nextInt((int) Math.floor(maze[0].length));
+
+//    int endRow = (int) Math.floor(maze.length / 2) + startRow;
+//    int endCol = (int) Math.ceil(maze[0].length / 2);
+//    startLocation = maze[startRow][startCol];
+//    endLocation = maze[endRow][endCol];
+
+    int randomIndex = random.nextInt(caveList.size());
+    ILocation start = caveList.get(randomIndex);
+    startLocation = maze[start.getRowCoordinate()][start.getColCoordinate()];
+    System.out.println("Start location: " + startLocation.getName());
+
+    int pathLength = 5;
+    //int pathLength = random.nextInt( (maze.length * maze[0].length) - MIN_PATH_LENGTH) + MIN_PATH_LENGTH;
+    ILocation end = depthLimitedSearch(startLocation, pathLength);
+    endLocation = maze[end.getRowCoordinate()][end.getColCoordinate()];
+    System.out.println("End location: " + endLocation.getName());
   }
 
+  private ILocation depthLimitedSearch(ILocation startLocation, int depthLimit) {
+    ILocation endLocation = null;
+    if (depthLimit == 0) {
+      return startLocation;
+    }
+    List<ILocation> extract = new ArrayList<>();
+    extract.add(startLocation);
+    for (int i = 1; i <= depthLimit; i++) {
+      // endLocation = depthFirstSearch(startLocation, i, depthLimit);
+    }
+    //extract = extractNeighbours(extract, depthLimit);
+    return endLocation;
+  }
+
+
+  //Getters
+  protected ILocation getPlayerStartLocation() {
+    return new Location(startLocation);
+  }
+
+  protected ILocation getPlayerEndLocation() {
+    return new Location(endLocation);
+  }
+
+  protected Map<Direction, ILocation> getNeighbours(ILocation location) {
+    return location.getNeighbours();
+  }
+
+  protected ILocation[][] getDungeonCopy() {
+    ILocation[][] dungeonCopy = new ILocation[maze.length][maze[0].length];
+    for (int i = 0; i < maze.length; i++) {
+      for (int j = 0; j < maze[i].length; j++) {
+        dungeonCopy[i][j] = new Location(maze[i][j]);
+      }
+    }
+    return dungeonCopy;
+  }
+
+
+  // Should be removed later
 
   private void initializeKruskalGroups() {
 //    for (int i = 0; i < maze.length; i++) {
@@ -337,16 +392,7 @@ public class Grid {
 //    }
   }
 
-  //Getters
-  protected ILocation getPlayerStartLocation() {
-    return new Location(startLocation);
-  }
 
-  protected ILocation getPlayerEndLocation() {
-    return new Location(endLocation);
-  }
-
-  // Should be removed later
   public void testConnection() {
     for (int i = 0; i < maze.length; i++) {
       for (int j = 0; j < maze[i].length; j++) {

@@ -5,6 +5,8 @@ import java.util.Random;
 
 import dungeon.character.Character;
 import dungeon.character.Player;
+import dungeon.location.ILocation;
+import dungeon.location.Location;
 import dungeon.treasure.ITreasure;
 import dungeon.treasure.Treasure;
 
@@ -12,34 +14,115 @@ import static org.junit.Assert.assertEquals;
 
 public class CharacterTest {
 
-  public Character player;
-  public Random rand;
+  private Character player;
+  private Random random;
+
   @Before
   public void setUp() throws Exception {
-    player = new Player("Player 1");
-    this.rand = new Random();
-    rand.setSeed(10);
+    random = new Random();
+    random.setSeed(20);
+    player = new Player("Player");
   }
 
   @Test
-  public void testPLayerCreation(){
-    assertEquals("Player 1", player.getName());
-    // assertEquals("Player 1", player.getTreasures());
+  public void getName() {
+    assertEquals("Player", player.getName());
   }
 
   @Test
-  public void testPlayerTreasure(){
-    ITreasure treasure1 = new Treasure(rand);
-    ITreasure treasure2 = new Treasure(rand);
-    ITreasure treasure3 = new Treasure(rand);
-    System.out.println(treasure1.getTreasure());
-    System.out.println(treasure2.getTreasure());
-    System.out.println(treasure3.getTreasure());
+  public void addTreasure() {
+    ITreasure treasure = new Treasure(random);
+    player.addTreasure(treasure);
+    String expected = "{DIAMONDS=7, RUBIES=4, SAPPHIRES=2}";
+
+    assertEquals(expected, player.getTreasures());
+  }
+
+  @Test
+  public void addTwoTreasure() {
+    ITreasure treasure1 = new Treasure(random);
+    assertEquals("{DIAMONDS=7, RUBIES=4, SAPPHIRES=2}", treasure1.getTreasure().toString());
+
+    ITreasure treasure2 = new Treasure(random);
+    assertEquals("{DIAMONDS=6, RUBIES=2, SAPPHIRES=6}", treasure2.getTreasure().toString());
+
     player.addTreasure(treasure1);
     player.addTreasure(treasure2);
-    player.addTreasure(treasure3);
-
-
-    assertEquals("{}", player.getTreasures());
+    String expected = "{DIAMONDS=13, RUBIES=6, SAPPHIRES=8}";
+    assertEquals(expected, player.getTreasures());
   }
+
+
+  @Test
+  public void getTreasures() {
+    ITreasure treasure = new Treasure(random);
+    player.addTreasure(treasure);
+    String expected = "{DIAMONDS=7, RUBIES=4, SAPPHIRES=2}";
+
+    assertEquals(expected, player.getTreasures());
+  }
+
+  @Test
+  public void getCurrentLocation() {
+    ILocation location = new Location(0, 0, random);
+    player.setCurrentLocation(location);
+    assertEquals(location, player.getCurrentLocation());
+  }
+
+  @Test
+  public void getCurrentLocationEmpty() {
+    assertEquals(null, player.getCurrentLocation());
+  }
+
+  @Test
+  public void setCurrentLocation() {
+    ILocation location = new Location(0, 0, random);
+    player.setCurrentLocation(location);
+    assertEquals(location, player.getCurrentLocation());
+
+    //Change location
+    ILocation location2 = new Location(1, 0, random);
+    player.setCurrentLocation(location2);
+    assertEquals(location2, player.getCurrentLocation());
+  }
+
+  @Test
+  public void movePlayer() {
+    ILocation location = new Location(0, 0, random);
+    player.setCurrentLocation(location);
+    assertEquals(location, player.getCurrentLocation());
+
+    //Change location
+    ILocation location2 = new Location(0, 1, random);
+    player.setCurrentLocation(location2);
+    assertEquals(location2, player.getCurrentLocation());
+
+    //Change location
+    ILocation location3 = new Location(0, 2, random);
+    player.setCurrentLocation(location3);
+
+
+    assertEquals(location3, player.getCurrentLocation());
+  }
+
+  @Test
+  public void printTravelStatus() {
+    ILocation location = new Location(0, 0, random);
+    ILocation location2 = new Location(1, 0, random);
+    ILocation location3 = new Location(2, 0, random);
+    player.setCurrentLocation(location);
+    player.setCurrentLocation(location2);
+    player.setCurrentLocation(location3);
+    String expected = "Player has traveled to the following locations: [(0, 0) (1, 0) (2, 0) ].\n" +
+            "Treasures: {}";
+    assertEquals(expected, player.printTravelStatus());
+  }
+
+  @Test
+  public void printTravelStatusEmpty() {
+    String expected = "Player has traveled to the following locations: [].\n" +
+            "Treasures: {}";
+    assertEquals(expected, player.printTravelStatus());
+  }
+
 }
