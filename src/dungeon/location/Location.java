@@ -171,4 +171,5 @@ public class Location implements ILocation {
     return String.format("(%d, %d), treasure: %s, neighbours: %s", this.coordinates[0],
             this.coordinates[1], this.currentTreasure, this.neighbours);
   }
+
 }
