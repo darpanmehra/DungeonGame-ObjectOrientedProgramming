@@ -1,45 +1,64 @@
 package dungeon;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.Stack;
 import java.util.TreeSet;
 
 import dungeon.directions.Direction;
 import dungeon.location.ILocation;
 import dungeon.location.Location;
 
+/**
+ * A grid of locations which is a dungeon in the game. It is created randomly using the Kruskal's
+ * algorithm for Minimum Spanning Tree. The inter-connectivity value adds those number of extra
+ * paths in the dungeon randomly.
+ */
 public class Grid {
-  private Random random;
-  private ILocation[][] maze;
+  private final Random random;
+  private final ILocation[][] maze;
   private Set<SortedSet<ILocation>> potentialPaths;
   private List<SortedSet> leftOverList;
 
   private List<List<ILocation>> kruskalLocationGroup;
 
-  private int MIN_PATH_LENGTH = 5;
+  private final int MIN_PATH_LENGTH = 5;
   private List<ILocation> caveList;
   private final double treasurePercentage;
   private ILocation startLocation;
   private ILocation endLocation;
 
-  public Grid(int numRow, int numCol, int interConnectivity, String dungeonType, double treasurePercentage, Random random) {
+  /**
+   * Constructor for the Grid.
+   *
+   * @param numRow             the width of the grid
+   * @param numCol             the height of the grid
+   * @param interConnectivity  the number of extra paths to add to the grid
+   * @param dungeonType        the type of dungeon to create
+   * @param treasurePercentage the percentage of treasure in the grid
+   * @param random             the random number generator
+   */
+  protected Grid(int numRow, int numCol, int interConnectivity, String dungeonType,
+                 double treasurePercentage, Random random) {
 
-    if (numRow < 10 || numRow > 100) {
+    if (numRow < 6 || numRow > 100) {
       throw new IllegalArgumentException("Dungeon width must be between 10 and 100");
     }
-    if (numCol < 10 || numCol > 100) {
+    if (numCol < 6 || numCol > 100) {
       throw new IllegalArgumentException("Dungeon width must be between 10 and 100");
     }
     if (interConnectivity < 0) {
       throw new IllegalArgumentException("Interconnectivity must be between 0 and dungeon size");
     }
-    if (!(dungeonType.equalsIgnoreCase("wrapping") || dungeonType.equalsIgnoreCase("nonwrapping"))) {
+    if (!(dungeonType.equalsIgnoreCase("wrapping")
+            || dungeonType.equalsIgnoreCase("nonwrapping"))) {
       throw new IllegalArgumentException("Dungeon type must be wrapping or nonwrapping");
     }
     if (treasurePercentage < 0 || treasurePercentage > 100) {
@@ -63,7 +82,7 @@ public class Grid {
 
     //Creating Dungeon
     initializeLocations(); //Initialize locations in the maze
-    //initializeKruskalGroups();
+
     if (dungeonType.equalsIgnoreCase("nonwrapping")) {
       updatePotentialPaths();
     } else if (dungeonType.equalsIgnoreCase("wrapping")) {
@@ -79,7 +98,6 @@ public class Grid {
 
     determineStartAndEndLocation(); //Assign start and end locations
   }
-
 
   private void initializeLocations() {
 
@@ -101,12 +119,6 @@ public class Grid {
   private void updatePotentialPaths() {
     for (int i = 0; i < maze.length; i++) {
       for (int j = 0; j < maze[i].length; j++) {
-//        if (((i - 1) >= 0)) {
-//          SortedSet<ILocation> path = new TreeSet<>();
-//          path.add(maze[i][j]);
-//          path.add(maze[i - 1][j]);
-//          potentialPaths.add(path);
-//        }
         if (((i + 1) < maze.length)) {
           SortedSet<ILocation> path = new TreeSet<>();
           path.add(maze[i][j]);
@@ -119,12 +131,6 @@ public class Grid {
           path.add(maze[i][j + 1]);
           potentialPaths.add(path);
         }
-//        if (((j - 1) >= 0)) {
-//          SortedSet<ILocation> path = new TreeSet<>();
-//          path.add(maze[i][j]);
-//          path.add(maze[i][j - 1]);
-//          potentialPaths.add(path);
-//        }
       }
     }
   }
@@ -195,10 +201,10 @@ public class Grid {
       var sortedLocationSet = list.get(pathIndex);
       for (ILocation value : sortedLocationSet) {
         if (count == 0) {
-          firstLocation = value; //n
+          firstLocation = value;
           count++;
         }
-        secondLocation = value; //o
+        secondLocation = value;
       }
 
       list.remove(pathIndex);
@@ -214,7 +220,8 @@ public class Grid {
 
       if (firstLocationIndex != secondLocationIndex) {
         joinLocation(firstLocation, secondLocation); // Make the locations neighbors of each other
-        kruskalLocationGroup.get(firstLocationIndex).addAll(kruskalLocationGroup.get(secondLocationIndex));
+        kruskalLocationGroup.get(firstLocationIndex)
+                .addAll(kruskalLocationGroup.get(secondLocationIndex));
         kruskalLocationGroup.remove(secondLocationIndex);
       } else { // Path added in the leftover list
         leftOverList.add(sortedLocationSet);
@@ -283,6 +290,9 @@ public class Grid {
     ILocation secondLocation = null;
     SortedSet<ILocation> sortedLocationSet;
     for (int i = 0; i < numAdditionalConnections; i++) {
+      if (leftOverList.size() == 0) {
+        break;
+      }
       int randomIndex = random.nextInt(leftOverList.size());
       sortedLocationSet = leftOverList.get(randomIndex);
       int count = 0;
@@ -321,40 +331,52 @@ public class Grid {
   }
 
   private void determineStartAndEndLocation() {
-//    int startRow = random.nextInt((int) Math.floor(maze.length / 2));
-//    int startCol = random.nextInt((int) Math.floor(maze[0].length));
-
-//    int endRow = (int) Math.floor(maze.length / 2) + startRow;
-//    int endCol = (int) Math.ceil(maze[0].length / 2);
-//    startLocation = maze[startRow][startCol];
-//    endLocation = maze[endRow][endCol];
-
     int randomIndex = random.nextInt(caveList.size());
-    ILocation start = caveList.get(randomIndex);
-    startLocation = maze[start.getRowCoordinate()][start.getColCoordinate()];
-    System.out.println("Start location: " + startLocation.getName());
-
-    int pathLength = 5;
-    //int pathLength = random.nextInt( (maze.length * maze[0].length) - MIN_PATH_LENGTH) + MIN_PATH_LENGTH;
-    ILocation end = depthLimitedSearch(startLocation, pathLength);
-    endLocation = maze[end.getRowCoordinate()][end.getColCoordinate()];
-    System.out.println("End location: " + endLocation.getName());
+    startLocation = caveList.get(randomIndex);
+    endLocation = modifiedBreadthFirstSearchToFindEnd(startLocation, MIN_PATH_LENGTH);
   }
 
-  private ILocation depthLimitedSearch(ILocation startLocation, int depthLimit) {
-    ILocation endLocation = null;
-    if (depthLimit == 0) {
-      return startLocation;
-    }
-    List<ILocation> extract = new ArrayList<>();
-    extract.add(startLocation);
-    for (int i = 1; i <= depthLimit; i++) {
-      // endLocation = depthFirstSearch(startLocation, i, depthLimit);
-    }
-    //extract = extractNeighbours(extract, depthLimit);
-    return endLocation;
-  }
+  private ILocation modifiedBreadthFirstSearchToFindEnd(ILocation startLocation,
+                                                        int minPathLength) {
+    Set<ILocation> visited = new HashSet<>();
+    Integer level = 0;
+    Queue<Map<ILocation, Integer>> objects = new LinkedList<>();
+    Map<ILocation, Integer> map = new HashMap<>();
+    map.put(startLocation, level);
+    objects.add(map);
+    ILocation currentLocation = startLocation;
 
+
+    while (!objects.isEmpty()) {
+
+      Map<ILocation, Integer> current = objects.remove();
+      for (ILocation location : current.keySet()) {
+        currentLocation = location;
+      }
+      int currentLevel = current.get(currentLocation);
+
+      // if we have found the end location, return it
+      if (currentLocation.isCave()
+              && current.get(currentLocation) >= minPathLength
+              && !visited.contains(currentLocation)) {
+        return currentLocation;
+      }
+      visited.add(currentLocation);
+
+      // add all the adjacent locations to the queue
+      for (ILocation value : currentLocation.getNeighbours().values()) {
+        if (value != null) {
+          if (!visited.contains(value)) {
+            Map<ILocation, Integer> newMap = new HashMap<>();
+            newMap.put(value, currentLevel + 1);
+            objects.add(newMap);
+          }
+        }
+      }
+
+    }
+    return currentLocation;
+  }
 
   //Getters
   protected ILocation getPlayerStartLocation() {
@@ -378,48 +400,5 @@ public class Grid {
     }
     return dungeonCopy;
   }
-
-
-  // Should be removed later
-
-  private void initializeKruskalGroups() {
-//    for (int i = 0; i < maze.length; i++) {
-//      for (int j = 0; j < maze[i].length; j++) {
-//        List<ILocation> location = new ArrayList<>();
-//        location.add(maze[i][j]);
-//        kruskalLocationGroup.add(location);
-//      }
-//    }
-  }
-
-
-  public void testConnection() {
-    for (int i = 0; i < maze.length; i++) {
-      for (int j = 0; j < maze[i].length; j++) {
-        System.out.println(maze[i][j]);
-      }
-    }
-  }
-
-  public void printGrid() {
-//    String finalString = "";
-//    for (int i = 0; i < maze.length; i++) {
-//      for (int j = 0; j < maze[i].length
-//              ; j++) {
-//        //System.out.printf("%s", maze[i][j].print());
-//      }
-//      //System.out.println();
-//      for (int j = 0; j < maze[i].length; j++) {
-//        //System.out.printf("%s", maze[i][j].printPipe());
-//      }
-//      //System.out.println();
-//
-//    }
-  }
-
-  public Set<SortedSet<ILocation>> getPotentialPath() {
-    return potentialPaths;
-  }
-
 
 }

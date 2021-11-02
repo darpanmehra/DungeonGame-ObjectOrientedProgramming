@@ -1,0 +1,89 @@
+Welcome to the Dungeon! 
+
+
+Player Start Position: (1, 0)
+Player End Position: (4, 1)
+(0, 0), treasure: null, neighbours: {EAST=(0, 1), NORTH=(5, 0)}
+(0, 1), treasure: null, neighbours: {SOUTH=(1, 1), WEST=(0, 0)}
+(0, 2), treasure: null, neighbours: {SOUTH=(1, 2), EAST=(0, 3)}
+(0, 3), treasure: null, neighbours: {SOUTH=(1, 3), NORTH=(5, 3), WEST=(0, 2)}
+(0, 4), treasure: null, neighbours: {SOUTH=(1, 4), NORTH=(5, 4)}
+(0, 5), treasure: null, neighbours: {SOUTH=(1, 5), NORTH=(5, 5)}
+(1, 0), treasure: null, neighbours: {SOUTH=(2, 0)}
+(1, 1), treasure: null, neighbours: {NORTH=(0, 1), EAST=(1, 2)}
+(1, 2), treasure: null, neighbours: {NORTH=(0, 2), WEST=(1, 1)}
+(1, 3), treasure: null, neighbours: {EAST=(1, 4), NORTH=(0, 3)}
+(1, 4), treasure: null, neighbours: {NORTH=(0, 4), EAST=(1, 5), WEST=(1, 3)}
+(1, 5), treasure: null, neighbours: {NORTH=(0, 5), WEST=(1, 4)}
+(2, 0), treasure: {RUBIES=6, DIAMONDS=10, SAPPHIRES=5}, neighbours: {NORTH=(1, 0), EAST=(2, 1), WEST=(2, 5)}
+(2, 1), treasure: null, neighbours: {WEST=(2, 0)}
+(2, 2), treasure: null, neighbours: {SOUTH=(3, 2)}
+(2, 3), treasure: null, neighbours: {EAST=(2, 4)}
+(2, 4), treasure: {RUBIES=10, DIAMONDS=5, SAPPHIRES=9}, neighbours: {SOUTH=(3, 4), EAST=(2, 5), WEST=(2, 3)}
+(2, 5), treasure: null, neighbours: {SOUTH=(3, 5), EAST=(2, 0), WEST=(2, 4)}
+(3, 0), treasure: null, neighbours: {SOUTH=(4, 0), WEST=(3, 5)}
+(3, 1), treasure: {RUBIES=4, DIAMONDS=9, SAPPHIRES=5}, neighbours: {EAST=(3, 2)}
+(3, 2), treasure: null, neighbours: {SOUTH=(4, 2), NORTH=(2, 2), WEST=(3, 1)}
+(3, 3), treasure: null, neighbours: {SOUTH=(4, 3), EAST=(3, 4)}
+(3, 4), treasure: null, neighbours: {NORTH=(2, 4), WEST=(3, 3)}
+(3, 5), treasure: null, neighbours: {SOUTH=(4, 5), NORTH=(2, 5), EAST=(3, 0)}
+(4, 0), treasure: null, neighbours: {EAST=(4, 1), NORTH=(3, 0)}
+(4, 1), treasure: null, neighbours: {WEST=(4, 0)}
+(4, 2), treasure: null, neighbours: {SOUTH=(5, 2), NORTH=(3, 2)}
+(4, 3), treasure: null, neighbours: {NORTH=(3, 3), EAST=(4, 4)}
+(4, 4), treasure: null, neighbours: {SOUTH=(5, 4), WEST=(4, 3)}
+(4, 5), treasure: null, neighbours: {NORTH=(3, 5)}
+(5, 0), treasure: null, neighbours: {SOUTH=(0, 0)}
+(5, 1), treasure: null, neighbours: {EAST=(5, 2)}
+(5, 2), treasure: {RUBIES=2, DIAMONDS=8, SAPPHIRES=10}, neighbours: {EAST=(5, 3), NORTH=(4, 2), WEST=(5, 1)}
+(5, 3), treasure: null, neighbours: {SOUTH=(0, 3), WEST=(5, 2)}
+(5, 4), treasure: null, neighbours: {SOUTH=(0, 4), NORTH=(4, 4)}
+(5, 5), treasure: null, neighbours: {SOUTH=(0, 5)}
+
+Player is at (1, 0) and has treasures {}
+Location originally had null treasures which the player acquired.
+Available directions from current location: [SOUTH]
+Enter which direction you want to move now?
+south
+Moving player to: (2, 0)
+
+Player is at (2, 0) and has treasures {DIAMONDS=10, RUBIES=6, SAPPHIRES=5}
+Location originally had {RUBIES=6, DIAMONDS=10, SAPPHIRES=5} treasures which the player acquired.
+Available directions from current location: [NORTH, EAST, WEST]
+Enter which direction you want to move now?
+west
+Moving player to: (2, 5)
+
+Player is at (2, 5) and has treasures {DIAMONDS=10, RUBIES=6, SAPPHIRES=5}
+Location originally had null treasures which the player acquired.
+Available directions from current location: [SOUTH, EAST, WEST]
+Enter which direction you want to move now?
+south
+Moving player to: (3, 5)
+
+Player is at (3, 5) and has treasures {DIAMONDS=10, RUBIES=6, SAPPHIRES=5}
+Location originally had null treasures which the player acquired.
+Available directions from current location: [SOUTH, NORTH, EAST]
+Enter which direction you want to move now?
+east
+Moving player to: (3, 0)
+
+Player is at (3, 0) and has treasures {DIAMONDS=10, RUBIES=6, SAPPHIRES=5}
+Location originally had null treasures which the player acquired.
+Available directions from current location: [SOUTH, WEST]
+Enter which direction you want to move now?
+south
+Moving player to: (4, 0)
+
+Player is at (4, 0) and has treasures {DIAMONDS=10, RUBIES=6, SAPPHIRES=5}
+Location originally had null treasures which the player acquired.
+Available directions from current location: [EAST, NORTH]
+Enter which direction you want to move now?
+east
+Moving player to: (4, 1)
+
+Player has traveled to the following locations: [(1, 0) (2, 0) (2, 5) (3, 5) (3, 0) (4, 0) (4, 1) ].
+Treasures: {DIAMONDS=10, RUBIES=6, SAPPHIRES=5}
+Game Over
+
+Process finished with exit code 0

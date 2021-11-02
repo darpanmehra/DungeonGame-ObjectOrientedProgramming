@@ -5,11 +5,15 @@ import java.util.Random;
 
 import dungeon.GameState;
 import dungeon.character.Character;
+import dungeon.directions.Direction;
 import dungeon.location.ILocation;
 
 import static org.junit.Assert.assertEquals;
 
-public class GameStateTest {
+/**
+ * A test class for the GameState interface.
+ */
+public class GameTest {
 
   private Random random;
   private GameState model;
@@ -18,7 +22,8 @@ public class GameStateTest {
   public void setUp() throws Exception {
     random = new Random();
     random.setSeed(50);
-    model = new GameState(10, 10, 0, "nonwrapping", 20, random);
+    model = new GameState(10, 10, 0,
+            "nonwrapping", 20, random);
   }
 
   @Test
@@ -55,14 +60,22 @@ public class GameStateTest {
 
   @Test
   public void movePlayer() {
+    Character player = model.getPlayer();
+    assertEquals("(6, 9)", player.getCurrentLocation().toString());
+    assertEquals("[NORTH]", model.getAvailableDirectionsFromPlayerPosition().toString());
+    model.movePlayer(Direction.NORTH);
 
-  }
 
-  @Test
-  public void getDungeon() {
+    assertEquals("(5, 9)", model.getPlayer().getCurrentLocation().toString());
+
   }
 
   @Test
   public void printPlayerTravelStatus() {
+    assertEquals("(6, 9)", model.getPlayer().getCurrentLocation().toString());
+    assertEquals("[NORTH]", model.getAvailableDirectionsFromPlayerPosition().toString());
+    model.movePlayer(Direction.NORTH);
+    assertEquals("Player has traveled to the following locations: [(6, 9) (5, 9) ].\n" +
+            "Treasures: {}", model.printPlayerTravelStatus());
   }
 }

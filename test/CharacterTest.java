@@ -12,6 +12,9 @@ import dungeon.treasure.Treasure;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * This class tests the Character class.
+ */
 public class CharacterTest {
 
   private Character player;
@@ -22,6 +25,11 @@ public class CharacterTest {
     random = new Random();
     random.setSeed(20);
     player = new Player("Player");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testSetUpNull() {
+    player = new Player(null);
   }
 
   @Test
@@ -41,17 +49,16 @@ public class CharacterTest {
   @Test
   public void addTwoTreasure() {
     ITreasure treasure1 = new Treasure(random);
-    assertEquals("{DIAMONDS=7, RUBIES=4, SAPPHIRES=2}", treasure1.getTreasure().toString());
+    assertEquals("{RUBIES=4, SAPPHIRES=2, DIAMONDS=7}", treasure1.getTreasure().toString());
 
     ITreasure treasure2 = new Treasure(random);
-    assertEquals("{DIAMONDS=6, RUBIES=2, SAPPHIRES=6}", treasure2.getTreasure().toString());
+    assertEquals("{RUBIES=2, SAPPHIRES=6, DIAMONDS=6}", treasure2.getTreasure().toString());
 
     player.addTreasure(treasure1);
     player.addTreasure(treasure2);
     String expected = "{DIAMONDS=13, RUBIES=6, SAPPHIRES=8}";
     assertEquals(expected, player.getTreasures());
   }
-
 
   @Test
   public void getTreasures() {
@@ -100,7 +107,6 @@ public class CharacterTest {
     //Change location
     ILocation location3 = new Location(0, 2, random);
     player.setCurrentLocation(location3);
-
 
     assertEquals(location3, player.getCurrentLocation());
   }

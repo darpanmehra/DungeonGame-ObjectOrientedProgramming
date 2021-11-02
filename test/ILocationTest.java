@@ -1,19 +1,19 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import dungeon.directions.Direction;
 import dungeon.location.ILocation;
 import dungeon.location.Location;
-import dungeon.treasure.ITreasure;
-import dungeon.treasure.Treasure;
-import dungeon.treasure.TreasureType;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+/**
+ * Tests the ILocation interface.
+ */
 public class ILocationTest {
 
   private Random rand;
@@ -23,7 +23,12 @@ public class ILocationTest {
   public void setUp() throws Exception {
     this.rand = new Random();
     rand.setSeed(50);
-    location = new Location(0,0, rand);
+    location = new Location(0, 0, rand);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testIncorrectLocationCreation() {
+    location = new Location(-1, 2, rand);
   }
 
   @Test
@@ -102,14 +107,14 @@ public class ILocationTest {
     location.joinLocationToWestDirection(west);
 
     location.setTreasure();
-    assertEquals("{RUBIES=8, DIAMONDS=9, SAPPHIRES=4}", location.getTreasure().toString());
+    assertEquals("{SAPPHIRES=4, RUBIES=8, DIAMONDS=9}", location.getTreasure().toString());
 
     location.setTreasureEmpty();
     assertEquals(null, location.getTreasure());
   }
 
   @Test
-  public void setTreasureInTunnel(){
+  public void setTreasureInTunnel() {
     ILocation north = new Location(0, 2, rand);
     ILocation south = new Location(2, 2, rand);
 
@@ -132,7 +137,7 @@ public class ILocationTest {
     location.joinLocationToWestDirection(west);
 
     location.setTreasure();
-    assertEquals("{RUBIES=8, DIAMONDS=9, SAPPHIRES=4}", location.getTreasure().toString());
+    assertEquals("{SAPPHIRES=4, RUBIES=8, DIAMONDS=9}", location.getTreasure().toString());
   }
 
   @Test
@@ -147,12 +152,14 @@ public class ILocationTest {
     location.joinLocationToWestDirection(west);
 
     location.setTreasure();
-    assertEquals("{RUBIES=8, DIAMONDS=9, SAPPHIRES=4}", location.getOriginalTreasure().toString());
+    assertEquals("{SAPPHIRES=4, RUBIES=8, DIAMONDS=9}",
+            location.getOriginalTreasure().toString());
 
     location.setTreasureEmpty();
     assertEquals(null, location.getTreasure());
 
-    assertEquals("{RUBIES=8, DIAMONDS=9, SAPPHIRES=4}", location.getOriginalTreasure().toString());
+    assertEquals("{SAPPHIRES=4, RUBIES=8, DIAMONDS=9}",
+            location.getOriginalTreasure().toString());
   }
 
   @Test
@@ -167,7 +174,7 @@ public class ILocationTest {
     location.joinLocationToWestDirection(west);
 
     location.setTreasure();
-    assertEquals("{RUBIES=8, DIAMONDS=9, SAPPHIRES=4}", location.getTreasure().toString());
+    assertEquals("{SAPPHIRES=4, RUBIES=8, DIAMONDS=9}", location.getTreasure().toString());
   }
 
   @Test
@@ -186,7 +193,8 @@ public class ILocationTest {
     assertEquals(south, location.getNeighbours().get(Direction.SOUTH));
     assertEquals(east, location.getNeighbours().get(Direction.EAST));
     assertEquals(west, location.getNeighbours().get(Direction.WEST));
-    assertEquals("{SOUTH=(2, 2), NORTH=(0, 2), EAST=(1, 3), WEST=(1, 1)}", location.getNeighbours().toString());
+    assertEquals("{SOUTH=(2, 2), EAST=(1, 3), WEST=(1, 1), NORTH=(0, 2)}",
+            location.getNeighbours().toString());
   }
 
   @Test
@@ -195,7 +203,8 @@ public class ILocationTest {
     location.joinLocationToNorthDirection(north);
 
     location.setTreasure();
-    assertEquals("(0, 0), treasure: {RUBIES=8, SAPPHIRES=4, DIAMONDS=9}, neighbours: {NORTH=(0, 2)}", location.printLocationInfo());
+    assertEquals("(0, 0), treasure: {SAPPHIRES=4, RUBIES=8, DIAMONDS=9}, " +
+            "neighbours: {NORTH=(0, 2)}", location.printLocationInfo());
   }
 
 }

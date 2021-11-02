@@ -8,8 +8,16 @@ import dungeon.character.Character;
 import dungeon.directions.Direction;
 import dungeon.location.ILocation;
 
+/**
+ * Driver class for the Dungeon game.
+ */
 public class Driver {
 
+  /**
+   * Main method for the Dungeon game.
+   *
+   * @param args command line arguments.
+   */
   public static void main(String[] args) {
 
     int dungeonHeight = Integer.parseInt(args[0]);
@@ -23,7 +31,8 @@ public class Driver {
     rand.setSeed(20);
 
     // Create a new dungeon- Initialize the model
-    GameState model = new GameState(dungeonHeight, dungeonWidth, interConnectivity, dungeonType, treasurePercentage, rand);
+    GameState model = new GameState(dungeonHeight, dungeonWidth, interConnectivity,
+            dungeonType, treasurePercentage, rand);
 
     Character player = model.getPlayer();
 
@@ -37,8 +46,8 @@ public class Driver {
     // Print Dungeon Copy
     ILocation[][] dungeon = model.getDungeon();
     StringBuilder dungeonBuilder = new StringBuilder();
-    for(int i = 0; i < dungeon.length; i++){
-      for(int j = 0; j < dungeon[i].length; j++){
+    for (int i = 0; i < dungeon.length; i++) {
+      for (int j = 0; j < dungeon[i].length; j++) {
         dungeonBuilder.append(dungeon[i][j].printLocationInfo());
         dungeonBuilder.append("\n");
       }
@@ -49,7 +58,9 @@ public class Driver {
     while (!model.isGameOver()) {
       System.out.println(player);
       List<Direction> availableDirections = model.getAvailableDirectionsFromPlayerPosition();
-      System.out.println("Location originally had " + player.getCurrentLocation().getOriginalTreasure() + " treasures which the player acquired.");
+      System.out.println("Location originally had "
+              + player.getCurrentLocation().getOriginalTreasure()
+              + " treasures which the player acquired.");
       System.out.println("Available directions from current location: " + availableDirections);
       ILocation newLocation;
 
@@ -87,7 +98,7 @@ public class Driver {
           System.out.println("Moving player to: " + newLocation);
           break;
         default:
-          System.out.println("Invalid input");
+          System.out.println("Invalid input. Try again!");
       }
       System.out.print("\n");
     }

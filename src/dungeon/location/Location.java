@@ -9,7 +9,10 @@ import dungeon.directions.Direction;
 import dungeon.treasure.ITreasure;
 import dungeon.treasure.Treasure;
 
-
+/**
+ * A location in the dungeon. It has a name, coordinates, a map of neighbors, and a map of
+ * treasures.
+ */
 public class Location implements ILocation {
 
   private final String locationName;
@@ -19,10 +22,21 @@ public class Location implements ILocation {
   private ITreasure currentTreasure;
   private Random random;
 
+  /**
+   * Constructor for a location.
+   *
+   * @param rowCoordinate The row coordinate of the location.
+   * @param colCoordinate The column coordinate of the location.
+   * @param random        The random function.
+   */
   public Location(int rowCoordinate, int colCoordinate, Random random) {
 
     if (rowCoordinate < 0 || colCoordinate < 0) {
       throw new IllegalArgumentException("Coordinates must be positive");
+    }
+
+    if (random == null) {
+      throw new IllegalArgumentException("Random cannot be null");
     }
 
     this.locationName = String.format("(%d, %d)", rowCoordinate, colCoordinate);
@@ -34,6 +48,11 @@ public class Location implements ILocation {
     this.random = random;
   }
 
+  /**
+   * A copy constructor for a location.
+   *
+   * @param loc The location to copy.
+   */
   public Location(ILocation loc) {
     if (loc == null) {
       throw new IllegalArgumentException("Location cannot be null");
@@ -71,10 +90,7 @@ public class Location implements ILocation {
     if (neighbours.size() == 0) {
       return false;
     }
-    if (neighbours.size() == 2) {
-      return false;
-    }
-    return true;
+    return neighbours.size() != 2;
   }
 
   @Override
@@ -134,10 +150,8 @@ public class Location implements ILocation {
       return false;
     }
     final Location other = (Location) obj;
-    if ((this.coordinates[0] == other.coordinates[0]) && (this.coordinates[1] == other.coordinates[1])) {
-      return true;
-    }
-    return false;
+    return (this.coordinates[0] == other.coordinates[0])
+            && (this.coordinates[1] == other.coordinates[1]);
   }
 
   @Override
@@ -150,20 +164,10 @@ public class Location implements ILocation {
   @Override
   public String toString() {
     return String.format("(%d, %d)", this.coordinates[0], this.coordinates[1]);
-
-//    return String.format("I am location (%s, %s) \n this is my north %s \n this is my south %s " +
-//                    "\n this is my east %s \n this is my west %s \n",
-//            this.coordinates[0], this.coordinates[1],
-//            this.neighbours.get(Direction.NORTH) != null ? this.neighbours.get(Direction.NORTH).getName() : "NULL",
-//            this.neighbours.get(Direction.SOUTH) != null ? this.neighbours.get(Direction.SOUTH).getName() : "NULL",
-//            this.neighbours.get(Direction.EAST) != null ? this.neighbours.get(Direction.EAST).getName() : "NULL",
-//            this.neighbours.get(Direction.WEST) != null ? this.neighbours.get(Direction.WEST).getName() : "NULL");
-//    return String.format("%s",
-//            this.locationName);
   }
 
   @Override
-  public String printLocationInfo(){
+  public String printLocationInfo() {
     return String.format("(%d, %d), treasure: %s, neighbours: %s", this.coordinates[0],
             this.coordinates[1], this.currentTreasure, this.neighbours);
   }

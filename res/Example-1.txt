@@ -1,0 +1,80 @@
+Welcome to the Dungeon! 
+
+
+Player Start Position: (2, 2)
+Player End Position: (5, 4)
+(0, 0), treasure: {RUBIES=6, DIAMONDS=5, SAPPHIRES=8}, neighbours: {EAST=(0, 1)}
+(0, 1), treasure: {RUBIES=10, DIAMONDS=5, SAPPHIRES=9}, neighbours: {EAST=(0, 2), SOUTH=(1, 1), WEST=(0, 0)}
+(0, 2), treasure: null, neighbours: {WEST=(0, 1), SOUTH=(1, 2)}
+(0, 3), treasure: null, neighbours: {EAST=(0, 4)}
+(0, 4), treasure: null, neighbours: {EAST=(0, 5), WEST=(0, 3)}
+(0, 5), treasure: null, neighbours: {SOUTH=(1, 5), WEST=(0, 4)}
+(1, 0), treasure: {RUBIES=8, DIAMONDS=9, SAPPHIRES=10}, neighbours: {SOUTH=(2, 0)}
+(1, 1), treasure: null, neighbours: {SOUTH=(2, 1), NORTH=(0, 1)}
+(1, 2), treasure: null, neighbours: {NORTH=(0, 2)}
+(1, 3), treasure: {RUBIES=1, DIAMONDS=2, SAPPHIRES=5}, neighbours: {SOUTH=(2, 3)}
+(1, 4), treasure: null, neighbours: {EAST=(1, 5)}
+(1, 5), treasure: {RUBIES=6, DIAMONDS=10, SAPPHIRES=5}, neighbours: {WEST=(1, 4), SOUTH=(2, 5), NORTH=(0, 5)}
+(2, 0), treasure: null, neighbours: {SOUTH=(3, 0), NORTH=(1, 0)}
+(2, 1), treasure: null, neighbours: {SOUTH=(3, 1), NORTH=(1, 1)}
+(2, 2), treasure: null, neighbours: {SOUTH=(3, 2)}
+(2, 3), treasure: null, neighbours: {SOUTH=(3, 3), NORTH=(1, 3)}
+(2, 4), treasure: null, neighbours: {SOUTH=(3, 4)}
+(2, 5), treasure: null, neighbours: {SOUTH=(3, 5), NORTH=(1, 5)}
+(3, 0), treasure: null, neighbours: {EAST=(3, 1), SOUTH=(4, 0), NORTH=(2, 0)}
+(3, 1), treasure: null, neighbours: {EAST=(3, 2), WEST=(3, 0), NORTH=(2, 1)}
+(3, 2), treasure: null, neighbours: {EAST=(3, 3), WEST=(3, 1), SOUTH=(4, 2), NORTH=(2, 2)}
+(3, 3), treasure: null, neighbours: {SOUTH=(4, 3), WEST=(3, 2), NORTH=(2, 3)}
+(3, 4), treasure: null, neighbours: {EAST=(3, 5), SOUTH=(4, 4), NORTH=(2, 4)}
+(3, 5), treasure: null, neighbours: {WEST=(3, 4), NORTH=(2, 5)}
+(4, 0), treasure: null, neighbours: {SOUTH=(5, 0), NORTH=(3, 0)}
+(4, 1), treasure: null, neighbours: {EAST=(4, 2), SOUTH=(5, 1)}
+(4, 2), treasure: null, neighbours: {WEST=(4, 1), SOUTH=(5, 2), NORTH=(3, 2)}
+(4, 3), treasure: null, neighbours: {EAST=(4, 4), NORTH=(3, 3)}
+(4, 4), treasure: null, neighbours: {EAST=(4, 5), SOUTH=(5, 4), WEST=(4, 3), NORTH=(3, 4)}
+(4, 5), treasure: null, neighbours: {WEST=(4, 4), SOUTH=(5, 5)}
+(5, 0), treasure: null, neighbours: {NORTH=(4, 0)}
+(5, 1), treasure: null, neighbours: {NORTH=(4, 1)}
+(5, 2), treasure: null, neighbours: {EAST=(5, 3), NORTH=(4, 2)}
+(5, 3), treasure: null, neighbours: {WEST=(5, 2)}
+(5, 4), treasure: null, neighbours: {NORTH=(4, 4)}
+(5, 5), treasure: null, neighbours: {NORTH=(4, 5)}
+
+Player is at (2, 2) and has treasures {}
+Location originally had null treasures which the player acquired.
+Available directions from current location: [SOUTH]
+Enter which direction you want to move now?
+south
+Moving player to: (3, 2)
+
+Player is at (3, 2) and has treasures {}
+Location originally had null treasures which the player acquired.
+Available directions from current location: [EAST, WEST, SOUTH, NORTH]
+Enter which direction you want to move now?
+east
+Moving player to: (3, 3)
+
+Player is at (3, 3) and has treasures {}
+Location originally had null treasures which the player acquired.
+Available directions from current location: [SOUTH, WEST, NORTH]
+Enter which direction you want to move now?
+south
+Moving player to: (4, 3)
+
+Player is at (4, 3) and has treasures {}
+Location originally had null treasures which the player acquired.
+Available directions from current location: [EAST, NORTH]
+Enter which direction you want to move now?
+east
+Moving player to: (4, 4)
+
+Player is at (4, 4) and has treasures {}
+Location originally had null treasures which the player acquired.
+Available directions from current location: [EAST, SOUTH, WEST, NORTH]
+Enter which direction you want to move now?
+south
+Moving player to: (5, 4)
+
+Player has traveled to the following locations: [(2, 2) (3, 2) (3, 3) (4, 3) (4, 4) (5, 4) ].
+Treasures: {}
+Game Over

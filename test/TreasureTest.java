@@ -11,16 +11,25 @@ import dungeon.treasure.TreasureType;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Test class for Treasure.
+ */
 public class TreasureTest {
 
   private ITreasure treasure;
-  private Random random;
+
 
   @Before
   public void setUp() throws Exception {
+    Random random;
     random = new Random();
     random.setSeed(10);
     treasure = new Treasure(random);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testIncorrectTreasureCreation() {
+    treasure = new Treasure(null);
   }
 
   @Test
@@ -35,7 +44,7 @@ public class TreasureTest {
 
   @Test
   public void testToString() {
-    String expected = "{DIAMONDS=1, RUBIES=4, SAPPHIRES=4}";
+    String expected = "{RUBIES=4, DIAMONDS=1, SAPPHIRES=4}";
     assertEquals(expected, treasure.toString());
   }
 }

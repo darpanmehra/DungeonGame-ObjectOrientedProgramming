@@ -9,13 +9,23 @@ import dungeon.location.ILocation;
 import dungeon.treasure.ITreasure;
 import dungeon.treasure.TreasureType;
 
+/**
+ * The player class implements the Character interface. It contains information about the player
+ * such as the player's name, the player's treasures, the player's current location, and the
+ * location the player has visited.
+ */
 public class Player implements Character {
 
-  private String name;
+  private final String name;
   private Map<TreasureType, Integer> treasures;
   private ILocation currentLocation;
   private List<ILocation> locationVisited;
 
+  /**
+   * Constructor for the player class.
+   *
+   * @param name the name of the player
+   */
   public Player(String name) {
     if (name == null || name.isEmpty()) {
       throw new IllegalArgumentException("Player name cannot be null or empty");
@@ -36,7 +46,8 @@ public class Player implements Character {
     Map<TreasureType, Integer> treasures = treasure.getTreasure();
     for (TreasureType treasureType : treasures.keySet()) {
       if (this.treasures.containsKey(treasureType)) {
-        this.treasures.put(treasureType, this.treasures.get(treasureType) + treasures.get(treasureType));
+        this.treasures.put(treasureType, this.treasures.get(treasureType)
+                + treasures.get(treasureType));
       } else {
         this.treasures.put(treasureType, treasures.get(treasureType));
       }
@@ -67,9 +78,9 @@ public class Player implements Character {
   @Override
   public String printTravelStatus() {
     StringBuilder sb = new StringBuilder();
-    sb.append(this.name + " has traveled to the following locations: [");
+    sb.append(this.name).append(" has traveled to the following locations: [");
     for (ILocation location : this.locationVisited) {
-      sb.append(location.getName() + " ");
+      sb.append(location.getName()).append(" ");
     }
     sb.append("].\nTreasures: ").append(this.treasures.toString());
     return sb.toString();
