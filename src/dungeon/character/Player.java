@@ -36,6 +36,21 @@ public class Player implements Character {
     this.locationVisited = new ArrayList<>();
   }
 
+  /**
+   * A copy constructor for the player class.
+   * @param player the player to copy
+   */
+  public Player(Character player) {
+
+    if (player == null) {
+      throw new IllegalArgumentException("Player cannot be null");
+    }
+    this.name = player.getName();
+    this.treasures = player.getTreasures();
+    this.currentLocation = player.getCurrentLocation();
+    this.locationVisited = player.getLocationVisited();
+  }
+
   @Override
   public String getName() {
     return this.name;
@@ -55,8 +70,8 @@ public class Player implements Character {
   }
 
   @Override
-  public String getTreasures() {
-    return this.treasures.toString();
+  public Map<TreasureType, Integer> getTreasures() {
+    return this.treasures;
   }
 
   @Override
@@ -84,6 +99,11 @@ public class Player implements Character {
     }
     sb.append("].\nTreasures: ").append(this.treasures.toString());
     return sb.toString();
+  }
+
+  @Override
+  public List<ILocation> getLocationVisited() {
+    return this.locationVisited;
   }
 
   @Override

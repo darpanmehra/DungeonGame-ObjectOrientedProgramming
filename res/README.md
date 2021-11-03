@@ -8,7 +8,7 @@
 ## Overview - Project 3 Dungeon
 
 Dungeons are generated at random following some set of constraints resulting in a different network each time the game begins.
-A dungeon can be non-wrapping in nature or wrapping in nature. For example, moving to the north from row 0 (at the top) in the grid moves the player to the location in the same column in row 5 (at the bottom). This is an example of a wrapping dungeon.
+A dungeon can be non-wrapping or wrapping in nature. For example, moving to the north from row 0 (at the top) in the grid moves the player to the location in the same column in row 5 (at the bottom). This is an example of a wrapping dungeon.
 
 
 Each location in the dungeon is connected by exactly one path if the interconnectivity is 0 or there can be more number of paths if the interconnectivity is high.
@@ -73,7 +73,6 @@ java -jar Project03-Dungeon.jar 10 10 0 nonwrapping 20
    1. Wrapping dungeon with player starting at (1, 0) and ending at (4, 1). Path length is 6, locations visited is 7.
 3. Example 3: Example3.txt
    1. Player visiting each location in the maze (6 x 6) before going to the end location.
-4. Example 4: Example4.txt
 
 ## Design/Model Changes
 1. Abstracted the Model functions and made it an Interface and class for the client interaction (called as GameState and IGameState)

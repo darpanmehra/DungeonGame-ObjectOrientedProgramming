@@ -1,7 +1,11 @@
 package dungeon.character;
 
+import java.util.List;
+import java.util.Map;
+
 import dungeon.location.ILocation;
 import dungeon.treasure.ITreasure;
+import dungeon.treasure.TreasureType;
 
 /**
  * This class represents a character in the dungeon. This interface can be extended to a class that
@@ -28,7 +32,7 @@ public interface Character {
    *
    * @return the treasure the character holds.
    */
-  String getTreasures();
+  Map<TreasureType, Integer> getTreasures();
 
   /**
    * This method is called when you need to get the current location of the character.
@@ -43,6 +47,12 @@ public interface Character {
    * @param location the location to set.
    */
   void setCurrentLocation(ILocation location);
+
+  /**
+   * This method is called when you need to get the list of locations visited by the character.
+   * @return the list of locations visited by the character.
+   */
+  List<ILocation> getLocationVisited();
 
   /**
    * This method is called to get the travel information of the character such as the locations

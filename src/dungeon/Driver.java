@@ -56,10 +56,10 @@ public class Driver {
 
 
     while (!model.isGameOver()) {
-      System.out.println(player);
+      System.out.println(model.getPlayer());
       List<Direction> availableDirections = model.getAvailableDirectionsFromPlayerPosition();
       System.out.println("Location originally had "
-              + player.getCurrentLocation().getOriginalTreasure()
+              + model.getPlayerCurrentLocation().getOriginalTreasure()
               + " treasures which the player acquired.");
       System.out.println("Available directions from current location: " + availableDirections);
       ILocation newLocation;

@@ -29,7 +29,7 @@ public class CharacterTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testSetUpNull() {
-    player = new Player(null);
+    player = new Player((Character) null);
   }
 
   @Test
@@ -38,12 +38,26 @@ public class CharacterTest {
   }
 
   @Test
+  public void testToStringImpl() {
+    //Set location
+    ILocation location = new Location(1, 0, random);
+    player.setCurrentLocation(location);
+
+    //Add treasure
+    ITreasure treasure = new Treasure(random);
+    player.addTreasure(treasure);
+
+    String expected = "Player is at (1, 0) and has treasures {DIAMONDS=7, RUBIES=4, SAPPHIRES=2}";
+    assertEquals(expected, player.toString());
+  }
+
+  @Test
   public void addTreasure() {
     ITreasure treasure = new Treasure(random);
     player.addTreasure(treasure);
     String expected = "{DIAMONDS=7, RUBIES=4, SAPPHIRES=2}";
 
-    assertEquals(expected, player.getTreasures());
+    assertEquals(expected, player.getTreasures().toString());
   }
 
   @Test
@@ -57,7 +71,7 @@ public class CharacterTest {
     player.addTreasure(treasure1);
     player.addTreasure(treasure2);
     String expected = "{DIAMONDS=13, RUBIES=6, SAPPHIRES=8}";
-    assertEquals(expected, player.getTreasures());
+    assertEquals(expected, player.getTreasures().toString());
   }
 
   @Test
@@ -66,7 +80,7 @@ public class CharacterTest {
     player.addTreasure(treasure);
     String expected = "{DIAMONDS=7, RUBIES=4, SAPPHIRES=2}";
 
-    assertEquals(expected, player.getTreasures());
+    assertEquals(expected, player.getTreasures().toString());
   }
 
   @Test
@@ -130,5 +144,6 @@ public class CharacterTest {
             "Treasures: {}";
     assertEquals(expected, player.printTravelStatus());
   }
+
 
 }

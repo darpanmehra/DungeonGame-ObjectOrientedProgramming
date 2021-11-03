@@ -47,6 +47,12 @@ public interface IGameState {
   ILocation getPlayerEndLocation();
 
   /**
+   * Get the player's current location.
+   * @return the player's current location.
+   */
+  ILocation getPlayerCurrentLocation();
+
+  /**
    * Get the current location of the player.
    *
    * @param direction the direction to move to.

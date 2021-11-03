@@ -1,12 +1,17 @@
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 
 import dungeon.GameState;
 import dungeon.directions.Direction;
 import dungeon.location.ILocation;
-import dungeon.location.Location;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -22,7 +27,7 @@ public class GameTestWrapping {
   private int interconnectivity;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     random = new Random();
     random.setSeed(50);
     interconnectivity = 0;
@@ -44,10 +49,22 @@ public class GameTestWrapping {
 
   @Test
   public void isGameOver() {
-    ILocation end = model.getPlayerEndLocation();
+    model = new GameState(6, 6, 10000,
+            "wrapping", 20, random);
+
+    //When player is at start location
     assertFalse(model.isGameOver());
 
-    model.getPlayer().setCurrentLocation(end);
+    //Move player to end location
+    model.movePlayer(Direction.NORTH);
+    model.movePlayer(Direction.NORTH);
+    model.movePlayer(Direction.NORTH);
+    model.movePlayer(Direction.NORTH);
+    model.movePlayer(Direction.EAST);
+    model.movePlayer(Direction.EAST);
+    model.movePlayer(Direction.EAST);
+
+    //Check if the game is over
     assertTrue(model.isGameOver());
   }
 
@@ -81,7 +98,6 @@ public class GameTestWrapping {
     }
     System.out.println(dungeonBuilder);
     assertEquals("(2, 4)", model.getPlayer().getCurrentLocation().toString());
-    ILocation change = new Location(2, 0, random);
 
     //non-wrapping move
     model.movePlayer(Direction.EAST);
@@ -104,6 +120,11 @@ public class GameTestWrapping {
   }
 
   @Test
+  public void testPlayerCurrentCLocation() {
+    assertEquals("(2, 4)", model.getPlayerCurrentLocation().toString());
+  }
+
+  @Test
   public void testInterconnectivity() {
     ILocation[][] dungeonCopy = model.getDungeon();
     int totalValidPaths = 0;
@@ -114,7 +135,7 @@ public class GameTestWrapping {
     }
     // Paths are bidirectional to totalValidPaths/ 2 gives the path count in the dungeon
     assertEquals(totalValidPaths / 2,
-            interconnectivity + (dungeonCopy.length * dungeonCopy[0].length - 1));
+            interconnectivity + ((long) dungeonCopy.length * dungeonCopy[0].length - 1));
   }
 
   @Test
@@ -130,7 +151,8 @@ public class GameTestWrapping {
       }
     }
 
-    assertEquals(totalValidPaths / 2, 8 + dungeon.length * dungeon[0].length - 1);
+    assertEquals(totalValidPaths / 2,
+            8 + (long) dungeon.length * dungeon[0].length - 1);
   }
 
   @Test
@@ -219,7 +241,8 @@ public class GameTestWrapping {
         totalValidPaths = totalValidPaths + dungeonCopy[i][j].getNeighbours().size();
       }
     }
-    assertEquals((totalValidPaths / 2), 0 + dungeonCopy.length * dungeonCopy[0].length - 1);
+    assertEquals((totalValidPaths / 2),
+            (long) dungeonCopy.length * dungeonCopy[0].length - 1);
   }
 
   @Test
@@ -234,7 +257,8 @@ public class GameTestWrapping {
         totalValidPaths = totalValidPaths + dungeonCopy[i][j].getNeighbours().size();
       }
     }
-    assertEquals((totalValidPaths / 2), 4 + dungeonCopy.length * dungeonCopy[0].length - 1);
+    assertEquals((totalValidPaths / 2),
+            4 + (long) dungeonCopy.length * dungeonCopy[0].length - 1);
   }
 
   @Test
@@ -252,4 +276,93 @@ public class GameTestWrapping {
     //All paths open from each location, so for 36 locations we have 36 * 4 = 144 paths
     assertEquals((totalValidPaths), (4 * dungeonCopy.length * dungeonCopy[0].length));
   }
+
+  @Test
+  public void testPathLength() {
+    //Creating a random maze creation 100 times and checking if the path length is correct (>=5) on
+    //each run
+    random = new Random();
+    for (int i = 0; i < 100; i++) {
+      model = new GameState(random.nextInt(94) + 6,
+              random.nextInt(94) + 6, random.nextInt(10000000),
+              "wrapping", 20, random);
+      ILocation start = model.getPlayerStartLocation(); // Selects a random cave as start
+      ILocation end = model.getPlayerEndLocation(); // selects a random cave as end
+
+      assertTrue(checkDistance(start, end) >= 5);
+
+    }
+  }
+
+  @Test
+  public void playerMovementsAllDirections() {
+    model = new GameState(6, 10, 1000,
+            "wrapping", 20, random);
+
+    //North movement
+    assertEquals("[SOUTH, WEST, EAST, NORTH]",
+            model.getAvailableDirectionsFromPlayerPosition().toString());
+    model.movePlayer(Direction.NORTH);
+    assertEquals("(3, 8)", model.getPlayerCurrentLocation().toString());
+
+    //South movement
+    assertEquals("[EAST, WEST, SOUTH, NORTH]",
+            model.getAvailableDirectionsFromPlayerPosition().toString());
+    model.movePlayer(Direction.SOUTH);
+    assertEquals("(4, 8)", model.getPlayerCurrentLocation().toString());
+
+    //East movement
+    assertEquals("[WEST, EAST, SOUTH, NORTH]",
+            model.getAvailableDirectionsFromPlayerPosition().toString());
+    model.movePlayer(Direction.EAST);
+    assertEquals("(4, 9)", model.getPlayerCurrentLocation().toString());
+
+    //West movement
+    assertEquals("[WEST, EAST, SOUTH, NORTH]",
+            model.getAvailableDirectionsFromPlayerPosition().toString());
+    model.movePlayer(Direction.WEST);
+    assertEquals("(4, 8)", model.getPlayerCurrentLocation().toString());
+
+  }
+
+  private int checkDistance(ILocation startLocation, ILocation endLocation) {
+
+    Set<ILocation> visited = new HashSet<>();
+    Integer level = 0;
+    Queue<Map<ILocation, Integer>> objects = new LinkedList<>();
+    Map<ILocation, Integer> map = new HashMap<>();
+    map.put(startLocation, level);
+    objects.add(map);
+    ILocation currentLocation = startLocation;
+
+
+    while (!objects.isEmpty()) {
+
+      Map<ILocation, Integer> current = objects.remove();
+      for (ILocation location : current.keySet()) {
+        currentLocation = location;
+      }
+      int currentLevel = current.get(currentLocation);
+
+      // if we have found the end location, return the level
+      if (currentLocation.equals(endLocation)) {
+        return currentLevel;
+      }
+      visited.add(currentLocation);
+
+      // add all the adjacent locations to the queue
+      for (ILocation value : currentLocation.getNeighbours().values()) {
+        if (value != null) {
+          if (!visited.contains(value)) {
+            Map<ILocation, Integer> newMap = new HashMap<>();
+            newMap.put(value, currentLevel + 1);
+            objects.add(newMap);
+          }
+        }
+      }
+
+    }
+    return -1;
+  }
+
 }

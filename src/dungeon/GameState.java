@@ -9,6 +9,7 @@ import dungeon.character.Character;
 import dungeon.character.Player;
 import dungeon.directions.Direction;
 import dungeon.location.ILocation;
+import dungeon.location.Location;
 
 /**
  * The GameState class is used to keep track of the state of the game.
@@ -65,7 +66,7 @@ public class GameState implements IGameState {
 
   @Override
   public Character getPlayer() {
-    return player;
+    return new Player(player);
   }
 
   @Override
@@ -94,6 +95,11 @@ public class GameState implements IGameState {
   @Override
   public ILocation getPlayerEndLocation() {
     return dungeon.getPlayerEndLocation();
+  }
+
+  @Override
+  public ILocation getPlayerCurrentLocation() {
+    return new Location(player.getCurrentLocation());
   }
 
   @Override
